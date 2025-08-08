@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="探索福建霞浦，中国最美滩涂摄影天堂。体验渔家文化，品尝海鲜美食，感受自然魅力。提供详细的旅游攻略、摄影指南和交通信息。">
+    <meta name="keywords" content="霞浦,滩涂,摄影,旅游,福建,海鲜,渔家文化,日出日落,北岐,杨家溪">
+    <meta name="author" content="霞浦旅游局">
+    <meta property="og:title" content="霞浦 - 中国最美滩涂摄影天堂">
+    <meta property="og:description" content="探索福建霞浦，中国最美滩涂摄影天堂。体验渔家文化，品尝海鲜美食，感受自然魅力。">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://xiapu-tourism.com">
+    <meta property="og:image" content="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/43557910-28c6-49b9-9f40-77c6b1b3a552/image_1754559652_1_1.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="霞浦 - 中国最美滩涂摄影天堂">
+    <meta name="twitter:description" content="探索福建霞浦，中国最美滩涂摄影天堂。体验渔家文化，品尝海鲜美食，感受自然魅力。">
+    <meta name="twitter:image" content="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/43557910-28c6-49b9-9f40-77c6b1b3a552/image_1754559652_1_1.jpg">
+    
+    <!-- 预加载关键资源 -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
+    <link rel="preconnect" href="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn">
+    
+    <title>霞浦 - 中国最美滩涂摄影天堂</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 二维码生成库 -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- 图片管理系统 -->
+    <script src="/image-manager.js"></script>
+    <!-- 图片搜索演示 -->
+    <script src="/image-search-demo.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ocean-blue': '#0ea5e9',
+                        'sunset-orange': '#f97316',
+                        'golden': '#fbbf24'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 性能优化：使用GPU加速 */
+        .hero-gradient {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.9), rgba(249, 115, 22, 0.9));
+            will-change: transform;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, box-shadow;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+            will-change: transform;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* 新增动画效果 */
+        .pulse-slow {
+            animation: pulse-slow 4s ease-in-out infinite;
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .slide-in-left {
+            animation: slide-in-left 0.8s ease-out;
+        }
+        @keyframes slide-in-left {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .slide-in-right {
+            animation: slide-in-right 0.8s ease-out;
+        }
+        @keyframes slide-in-right {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* 搜索高亮效果 */
+        .highlight-section {
+            animation: highlight-pulse 2s ease-in-out;
+            border: 2px solid #0ea5e9;
+            border-radius: 8px;
+        }
+        
+        @keyframes highlight-pulse {
+            0%, 100% { 
+                box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4);
+            }
+            50% { 
+                box-shadow: 0 0 0 10px rgba(14, 165, 233, 0.1);
+            }
+        }
+        
+        /* 搜索结果高亮 */
+        mark {
+            background-color: #fef08a;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        
+        /* 搜索面板优化 */
+        .search-panel-enter {
+            animation: search-panel-enter 0.3s ease-out;
+        }
+        
+        @keyframes search-panel-enter {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        /* 搜索输入框聚焦效果 */
+        .search-input-focus {
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+            border-color: #0ea5e9;
+        }
+        
+        /* 导航栏搜索框样式 */
+        .search-trigger {
+            min-width: 200px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-trigger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 搜索模态框优化 */
+        .search-modal-content {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        /* 搜索结果项悬停效果 */
+        .search-result-item {
+            transition: all 0.2s ease-in-out;
+            border-radius: 8px;
+        }
+        
+        .search-result-item:hover {
+            background: linear-gradient(135deg, rgba(14, 165, 233, 0.05), rgba(249, 115, 22, 0.05));
+            transform: translateX(4px);
+            border-left: 3px solid #0ea5e9;
+        }
+        
+        /* 搜索结果项悬停效果 */
+        .search-result-item {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .search-result-item:hover {
+            background-color: #f8fafc;
+            transform: translateX(4px);
+            border-left: 3px solid #0ea5e9;
+            padding-left: 12px;
+        }
+        
+        /* 加载动画优化 */
+        .search-loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 50%;
+            border-top-color: #0ea5e9;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 搜索标签样式 */
+        .search-tag-hover {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .search-tag-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 响应式搜索面板 */
+        @media (max-width: 640px) {
+            .search-panel-mobile {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 60;
+            }
+            
+            .search-panel-content {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 90%;
+                max-width: 400px;
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                max-height: 80vh;
+                overflow-y: auto;
+            }
+        }
+        
+        /* 搜索历史样式 */
+        .search-history-item {
+            transition: all 0.2s ease-in-out;
+        }
+        
+        .search-history-item:hover {
+            background-color: #f1f5f9;
+            padding-left: 16px;
+        }
+        
+        /* 无结果状态样式 */
+        .no-results {
+            opacity: 0.7;
+            filter: grayscale(0.3);
+        }
+        
+        /* 搜索成功状态 */
+        .search-success {
+            border-left: 4px solid #10b981;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+        }
+        
+        /* 加载动画 */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* 图片懒加载优化 */
+        .lazy-image {
+            transition: opacity 0.3s;
+            opacity: 0;
+        }
+        .lazy-image.loaded {
+            opacity: 1;
+        }
+        
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0ea5e9;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0284c7;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- 导航栏 -->
+    <nav class="fixed top-0 w-full bg-white/90 backdrop-blur-md shadow-lg z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-camera text-ocean-blue text-2xl mr-3"></i>
+                    <span class="text-xl font-bold text-gray-800">霞浦之美</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#hero" class="text-gray-700 hover:text-ocean-blue transition-colors">首页</a>
+                    <a href="#scenery" class="text-gray-700 hover:text-ocean-blue transition-colors">自然风光</a>
+                    <a href="#culture" class="text-gray-700 hover:text-ocean-blue transition-colors">渔业文化</a>
+                    <a href="#photography" class="text-gray-700 hover:text-ocean-blue transition-colors">摄影天堂</a>
+                    <a href="#food" class="text-gray-700 hover:text-ocean-blue transition-colors">美食特产</a>
+                    
+                    <!-- 搜索框 -->
+                    <div class="relative">
+                        <div class="flex items-center bg-gray-100 hover:bg-gray-200 rounded-full px-4 py-2 transition-all duration-300 cursor-pointer search-trigger" onclick="showSearchModal()">
+                            <i class="fas fa-search text-gray-500 mr-2"></i>
+                            <span class="text-gray-500 text-sm">搜索霞浦...</span>
+                            <span class="ml-3 text-xs text-gray-400 bg-gray-300 px-2 py-1 rounded">Ctrl+K</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 移动端菜单 -->
+                <div class="flex items-center space-x-3">
+                    <!-- 移动端搜索按钮 -->
+                    <button class="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors" onclick="showSearchModal()">
+                        <i class="fas fa-search text-gray-700"></i>
+                    </button>
+                    <!-- 移动端菜单按钮 -->
+                    <button class="md:hidden p-2 rounded-full hover:bg-gray-100 transition-colors" onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-gray-700"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section id="hero" class="relative h-screen flex items-center justify-center hero-gradient">
+        <div class="absolute inset-0 bg-black/30"></div>
+        <div class="relative z-10 text-center text-white px-4">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 floating">
+                霞浦
+                <span class="block text-3xl md:text-4xl font-light mt-2">中国最美滩涂</span>
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
+                福建霞浦，摄影师的天堂，渔民的家园<br>
+                这里有最美的滩涂日出，最壮观的海上牧场
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button class="bg-sunset-orange hover:bg-orange-600 text-white px-8 py-3 rounded-full text-lg font-semibold transition-all transform hover:scale-105">
+                    <i class="fas fa-camera mr-2"></i>开始探索
+                </button>
+                <button class="border-2 border-white text-white hover:bg-white hover:text-gray-800 px-8 py-3 rounded-full text-lg font-semibold transition-all">
+                    <i class="fas fa-play mr-2"></i>观看视频
+                </button>
+            </div>
+        </div>
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
+            <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+    </section>
+
+    <!-- 自然风光区域 -->
+    <section id="scenery" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">自然风光</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    霞浦拥有中国最美的滩涂风光，每一个日出日落都是大自然的杰作
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 滩涂日出 -->
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
+                    <div class="relative h-64">
+                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/43557910-28c6-49b9-9f40-77c6b1b3a552/image_1754559652_1_1.jpg" 
+                             alt="霞浦滩涂日出" class="w-full h-full object-cover" data-image-type="landscape">
+                        <div class="absolute top-4 left-4 bg-sunset-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-sun mr-1"></i>日出美景
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">滩涂日出</h3>
+                        <p class="text-gray-600 mb-4">金色的阳光洒在滩涂上，渔民劳作的身影与自然美景完美融合，构成一幅幅动人的画卷。</p>
+                        <div class="flex items-center text-ocean-blue">
+                            <i class="fas fa-camera mr-2"></i>
+                            <span class="text-sm font-semibold">最佳拍摄时间：5:30-7:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 滩涂风光 -->
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
+                    <div class="relative h-64">
+                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/39621b3d-098c-4bc7-b96f-814fef7c43de/image_1754559659_1_1.jpg" 
+                             alt="霞浦滩涂风光" class="w-full h-full object-cover" data-image-type="landscape">
+                        <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-water mr-1"></i>滩涂奇观
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">滩涂奇观</h3>
+                        <p class="text-gray-600 mb-4">潮起潮落间，滩涂呈现出千变万化的纹理和色彩，每一刻都是独一无二的艺术品。</p>
+                        <div class="flex items-center text-ocean-blue">
+                            <i class="fas fa-eye mr-2"></i>
+                            <span class="text-sm font-semibold">观赏季节：四季皆宜</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 海岸风景 -->
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
+                    <div class="relative h-64">
+                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/d89167c4-bae6-450a-bf81-df722f4c153a/image_1754559667_1_1.jpg" 
+                             alt="霞浦海岸风景" class="w-full h-full object-cover" data-image-type="landscape">
+                        <div class="absolute top-4 left-4 bg-ocean-blue text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            <i class="fas fa-mountain mr-1"></i>海岸线
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">绵延海岸</h3>
+                        <p class="text-gray-600 mb-4">蜿蜒曲折的海岸线，奇特的礁石地貌，展现着大自然的鬼斧神工。</p>
+                        <div class="flex items-center text-ocean-blue">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span class="text-sm font-semibold">推荐地点：北岐、杨家溪</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 渔业文化区域 -->
+    <section id="culture" class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">渔业文化</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    霞浦是中国海带之乡和紫菜之乡，这里的海上牧场文化源远流长
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div class="fade-in">
+                    <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/86f54dc4-df23-4aef-83c4-84eb91d88d95/image_1754559678_1_1.jpg" 
+                         alt="霞浦紫菜养殖" class="w-full rounded-2xl shadow-lg" data-image-type="landscape">
+                </div>
+                <div class="fade-in">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">海上牧场</h3>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        霞浦的海上养殖业历史悠久，紫菜、海带养殖场景壮观。一排排整齐的养殖架在海面上延伸，
+                        形成了独特的海上牧场景观，这不仅是渔民的生计来源，更是一道美丽的风景线。
+                    </p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <i class="fas fa-seedling text-green-500 text-2xl mb-2"></i>
+                            <h4 class="font-semibold text-gray-800">紫菜之乡</h4>
+                            <p class="text-sm text-gray-600">全国最大的紫菜产区</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow">
+                            <i class="fas fa-fish text-blue-500 text-2xl mb-2"></i>
+                            <h4 class="font-semibold text-gray-800">海带基地</h4>
+                            <p class="text-sm text-gray-600">优质海带的故乡</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 渔船归港 -->
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
+                    <div class="relative h-48">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/90c75e22-6f4d-472c-9652-039c2c453707/image_1754559684_2_1.jpg" 
+                             alt="霞浦渔船" class="w-full h-full object-cover lazy-image loading-skeleton"
+                             loading="lazy" data-image-type="landscape">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">渔船归港</h4>
+                        <p class="text-gray-600 text-sm">夕阳西下，渔船满载而归，港湾里一片繁忙景象。</p>
+                    </div>
+                </div>
+
+                <!-- 海带养殖 -->
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
+                    <div class="relative h-48">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/4f2376bd-d630-4f5c-800b-710b0aebda69/image_1754559690_3_1.jpg" 
+                             alt="霞浦海带养殖" class="w-full h-full object-cover lazy-image loading-skeleton" data-image-type="landscape"
+                             loading="lazy">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">海带养殖</h4>
+                        <p class="text-gray-600 text-sm">整齐排列的海带养殖架，展现着现代化的海洋农业。</p>
+                    </div>
+                </div>
+
+                <!-- 渔民生活 -->
+                <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
+                    <div class="relative h-48">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/2ae33763-0a7c-4763-815a-9a6615d6c58e/image_1754559698_2_1.jpg" 
+                             alt="霞浦渔民" class="w-full h-full object-cover lazy-image loading-skeleton"
+                             loading="lazy" data-image-type="landscape">
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-lg font-bold text-gray-800 mb-2">渔民生活</h4>
+                        <p class="text-gray-600 text-sm">勤劳的渔民世代以海为生，传承着古老的渔业文化。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 摄影天堂区域 -->
+    <section id="photography" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">摄影天堂</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    霞浦被誉为摄影师的天堂，这里的光影变化和人文景观为摄影创作提供了无限可能
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-gradient-to-br from-sunset-orange to-red-500 text-white p-6 rounded-2xl text-center fade-in">
+                    <i class="fas fa-camera text-4xl mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">光影艺术</h4>
+                    <p class="text-sm opacity-90">滩涂上的光影变化，创造无限摄影可能</p>
+                </div>
+                <div class="bg-gradient-to-br from-ocean-blue to-blue-600 text-white p-6 rounded-2xl text-center fade-in">
+                    <i class="fas fa-users text-4xl mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">人文纪实</h4>
+                    <p class="text-sm opacity-90">渔民劳作的真实场景，充满生活气息</p>
+                </div>
+                <div class="bg-gradient-to-br from-golden to-yellow-500 text-white p-6 rounded-2xl text-center fade-in">
+                    <i class="fas fa-mountain text-4xl mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">风光大片</h4>
+                    <p class="text-sm opacity-90">壮美的海景，适合各种摄影创作</p>
+                </div>
+                <div class="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-6 rounded-2xl text-center fade-in">
+                    <i class="fas fa-clock text-4xl mb-4"></i>
+                    <h4 class="text-xl font-bold mb-2">四季皆宜</h4>
+                    <p class="text-sm opacity-90">一年四季都有不同的摄影主题</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 rounded-3xl p-8 fade-in">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">摄影攻略</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-sun text-sunset-orange text-xl mr-3"></i>
+                            <h4 class="font-semibold text-gray-800">最佳时间</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm">日出：5:30-7:00<br>日落：17:30-19:00<br>潮汐时间需提前查询</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-map-marker-alt text-ocean-blue text-xl mr-3"></i>
+                            <h4 class="font-semibold text-gray-800">推荐地点</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm">北岐滩涂、杨家溪、小皓海滩<br>东壁日落、沙江S湾<br>花竹日出观景台</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-camera text-golden text-xl mr-3"></i>
+                            <h4 class="font-semibold text-gray-800">拍摄技巧</h4>
+                        </div>
+                        <p class="text-gray-600 text-sm">使用三脚架稳定拍摄<br>利用前景增加层次感<br>注意潮汐变化时间</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 美食特产区域 -->
+    <section id="food" class="py-20 bg-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">美食特产</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    霞浦的海鲜美食和特色小吃，让你在欣赏美景的同时，也能品尝到地道的闽东风味
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div class="fade-in">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">海鲜盛宴</h3>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        霞浦临海而居，海鲜资源丰富。新鲜的海蛎、扇贝、海蟹、带鱼等海产品，
+                        经过当地厨师的精心烹制，呈现出最地道的闽东海鲜风味。
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center bg-white p-4 rounded-lg shadow-sm">
+                            <i class="fas fa-fish text-ocean-blue text-2xl mr-4"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">新鲜海鲜</h4>
+                                <p class="text-sm text-gray-600">当日捕捞，当日享用</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center bg-white p-4 rounded-lg shadow-sm">
+                            <i class="fas fa-utensils text-sunset-orange text-2xl mr-4"></i>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">地道做法</h4>
+                                <p class="text-sm text-gray-600">传承百年的烹饪技艺</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="fade-in">
+                    <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/4de8f2c4-0148-4ab1-8341-a14cd2cc5ac8/image_1754616121_2_1.jpg" 
+                         alt="霞浦海鲜美食" class="w-full rounded-2xl shadow-lg lazy-image loading-skeleton"
+                         loading="lazy" data-image-type="food">
+                </div>
+            </div>
+
+            <!-- 美食图片画廊 -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+                <div class="fade-in">
+                    <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/7865cf26-d6cb-41f5-ab76-4c32cef33396/image_1754616131_4_1.jpg" 
+                         alt="霞浦紫菜" class="w-full h-48 object-cover rounded-xl shadow-lg lazy-image loading-skeleton card-hover"
+                         loading="lazy" data-image-type="food">
+                    <p class="text-center mt-2 text-sm font-medium text-gray-700">霞浦紫菜</p>
+                </div>
+                <div class="fade-in">
+                    <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/af53c5c7-625b-4677-ae75-b60a672473c4/image_1754616139_1_1.jpg" 
+                         alt="优质海带" class="w-full h-48 object-cover rounded-xl shadow-lg lazy-image loading-skeleton card-hover"
+                         loading="lazy" data-image-type="food">
+                    <p class="text-center mt-2 text-sm font-medium text-gray-700">优质海带</p>
+                </div>
+                <div class="fade-in">
+                    <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/03af97c8-bcc4-4433-a524-a5a019c5eee7/image_1754616146_3_1.jpg" 
+                         alt="福建鱼丸" class="w-full h-48 object-cover rounded-xl shadow-lg lazy-image loading-skeleton card-hover"
+                         loading="lazy" data-image-type="food">
+                    <p class="text-center mt-2 text-sm font-medium text-gray-700">福建鱼丸</p>
+                </div>
+                <div class="fade-in">
+                    <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/e053fa41-2028-48ce-ab11-10f8102317c3/image_1754618396_1_1.jpg" 
+                         alt="海鲜盛宴" class="w-full h-48 object-cover rounded-xl shadow-lg lazy-image loading-skeleton card-hover"
+                         loading="lazy" data-image-type="food">
+                    <p class="text-center mt-2 text-sm font-medium text-gray-700">海鲜盛宴</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 特产卡片 -->
+                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 text-center fade-in">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-seedling text-green-500 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">霞浦紫菜</h4>
+                    <p class="text-gray-600 text-sm mb-4">营养丰富，口感鲜美的优质紫菜</p>
+                    <span class="inline-block bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
+                        地理标志产品
+                    </span>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 text-center fade-in">
+                    <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-water text-blue-500 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">优质海带</h4>
+                    <p class="text-gray-600 text-sm mb-4">肉厚味美，营养价值极高</p>
+                    <span class="inline-block bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-semibold">
+                        全国知名
+                    </span>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 text-center fade-in">
+                    <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-cookie-bite text-orange-500 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">传统小吃</h4>
+                    <p class="text-gray-600 text-sm mb-4">鱼丸、肉燕等地方特色小吃</p>
+                    <span class="inline-block bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-semibold">
+                        传统工艺
+                    </span>
+                </div>
+
+                <div class="card-hover bg-white rounded-2xl shadow-lg p-6 text-center fade-in">
+                    <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-wine-bottle text-red-500 text-2xl"></i>
+                    </div>
+                    <h4 class="text-lg font-bold text-gray-800 mb-2">海鲜干货</h4>
+                    <p class="text-gray-600 text-sm mb-4">虾米、鱿鱼丝等优质海产品</p>
+                    <span class="inline-block bg-red-100 text-red-800 px-3 py-1 rounded-full text-xs font-semibold">
+                        伴手礼品
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 历史文化区域 -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 fade-in">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">历史文化</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    霞浦历史悠久，文化底蕴深厚，古村落和传统建筑见证着这片土地的沧桑变迁
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="fade-in">
+                    <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/e91af691-0cc1-4d28-9f11-a10f83a3a803/image_1754559667_2_1.jpg" 
+                         alt="霞浦古村落" class="w-full rounded-2xl shadow-lg" data-image-type="landscape">
+                </div>
+                <div class="fade-in">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-6">古村落风貌</h3>
+                    <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                        霞浦的古村落保存着完好的传统建筑风格，青砖黛瓦，飞檐翘角，
+                        展现着闽东地区独特的建筑文化和历史韵味。
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <i class="fas fa-home text-gray-600 text-xl mb-2"></i>
+                            <h4 class="font-semibold text-gray-800 mb-1">传统民居</h4>
+                            <p class="text-sm text-gray-600">保存完好的闽东建筑风格</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <i class="fas fa-landmark text-gray-600 text-xl mb-2"></i>
+                            <h4 class="font-semibold text-gray-800 mb-1">古迹遗存</h4>
+                            <p class="text-sm text-gray-600">寺庙祠堂等历史建筑</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系我们区域 -->
+    <section class="py-20 bg-gradient-to-r from-ocean-blue to-blue-600 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="fade-in">
+                <h2 class="text-4xl font-bold mb-6">来霞浦，遇见最美的中国</h2>
+                <p class="text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                    无论你是摄影爱好者、美食探索者，还是文化旅行者，霞浦都会给你带来难忘的体验
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                    <button class="bg-white text-ocean-blue hover:bg-gray-100 px-8 py-3 rounded-full text-lg font-semibold transition-all transform hover:scale-105">
+                        <i class="fas fa-phone mr-2"></i>联系我们
+                    </button>
+                    <button class="border-2 border-white text-white hover:bg-white hover:text-ocean-blue px-8 py-3 rounded-full text-lg font-semibold transition-all">
+                        <i class="fas fa-map-marker-alt mr-2"></i>查看地图
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div>
+                        <i class="fas fa-map-marker-alt text-3xl mb-4"></i>
+                        <h4 class="text-lg font-semibold mb-2">地理位置</h4>
+                        <p class="opacity-80">福建省宁德市霞浦县</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-plane text-3xl mb-4"></i>
+                        <h4 class="text-lg font-semibold mb-2">交通便利</h4>
+                        <p class="opacity-80">高铁直达，自驾方便</p>
+                    </div>
+                    <div>
+                        <i class="fas fa-calendar text-3xl mb-4"></i>
+                        <h4 class="text-lg font-semibold mb-2">最佳时节</h4>
+                        <p class="opacity-80">四季皆宜，各有特色</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-camera text-ocean-blue text-2xl mr-3"></i>
+                        <span class="text-xl font-bold">霞浦之美</span>
+                    </div>
+                    <p class="text-gray-400 text-sm">
+                        发现霞浦之美，感受滩涂魅力，体验渔家文化。
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">快速导航</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#scenery" class="hover:text-white transition-colors">自然风光</a></li>
+                        <li><a href="#culture" class="hover:text-white transition-colors">渔业文化</a></li>
+                        <li><a href="#photography" class="hover:text-white transition-colors">摄影天堂</a></li>
+                        <li><a href="#food" class="hover:text-white transition-colors">美食特产</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">联系信息</h4>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><i class="fas fa-phone mr-2"></i>旅游咨询热线</li>
+                        <li><i class="fas fa-envelope mr-2"></i>info@xiapu.com</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>福建省宁德市霞浦县</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">关注我们</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-ocean-blue transition-colors">
+                            <i class="fab fa-weixin"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-ocean-blue transition-colors">
+                            <i class="fab fa-weibo"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center hover:bg-ocean-blue transition-colors">
+                            <i class="fab fa-qq"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+                <p>&copy; 2024 霞浦之美. 保留所有权利. | 让世界看见霞浦的美丽</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="video-generator.js"></script>
+    <script src="hero-video.js"></script>
+    <script src="performance-optimizer.js"></script>
+    <script type="module" src="main.js"></script>
+</body>
+</html>

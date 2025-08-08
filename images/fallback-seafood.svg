@@ -1,0 +1,114 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="plateGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f0f0f0;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="crabGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ff6347;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#dc143c;stop-opacity:1" />
+    </radialGradient>
+    <linearGradient id="fishGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4682b4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#87ceeb;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景 -->
+  <rect width="800" height="600" fill="#f5f5dc"/>
+  
+  <!-- 餐桌木纹 -->
+  <rect width="800" height="600" fill="#deb887" opacity="0.3"/>
+  <path d="M0,100 Q200,90 400,100 T800,100" stroke="#8b7355" stroke-width="2" opacity="0.5"/>
+  <path d="M0,200 Q150,190 300,200 T600,200 T800,200" stroke="#8b7355" stroke-width="2" opacity="0.5"/>
+  <path d="M0,300 Q250,290 500,300 T800,300" stroke="#8b7355" stroke-width="2" opacity="0.5"/>
+  <path d="M0,400 Q100,390 200,400 T400,400 T800,400" stroke="#8b7355" stroke-width="2" opacity="0.5"/>
+  <path d="M0,500 Q300,490 600,500 T800,500" stroke="#8b7355" stroke-width="2" opacity="0.5"/>
+  
+  <!-- 主盘子 -->
+  <ellipse cx="400" cy="300" rx="250" ry="200" fill="url(#plateGradient)" stroke="#ddd" stroke-width="3"/>
+  <ellipse cx="400" cy="300" rx="230" ry="180" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+  
+  <!-- 螃蟹 -->
+  <ellipse cx="300" cy="250" rx="60" ry="40" fill="url(#crabGradient)"/>
+  <ellipse cx="280" cy="240" rx="15" ry="10" fill="url(#crabGradient)"/>
+  <ellipse cx="320" cy="240" rx="15" ry="10" fill="url(#crabGradient)"/>
+  <!-- 螃蟹钳子 -->
+  <ellipse cx="250" cy="230" rx="20" ry="12" fill="url(#crabGradient)"/>
+  <ellipse cx="350" cy="230" rx="20" ry="12" fill="url(#crabGradient)"/>
+  <!-- 螃蟹腿 -->
+  <rect x="270" y="270" width="4" height="25" fill="#dc143c" rx="2"/>
+  <rect x="280" y="275" width="4" height="20" fill="#dc143c" rx="2"/>
+  <rect x="290" y="275" width="4" height="20" fill="#dc143c" rx="2"/>
+  <rect x="310" y="275" width="4" height="20" fill="#dc143c" rx="2"/>
+  <rect x="320" y="275" width="4" height="20" fill="#dc143c" rx="2"/>
+  <rect x="330" y="270" width="4" height="25" fill="#dc143c" rx="2"/>
+  
+  <!-- 鱼 -->
+  <ellipse cx="500" cy="280" rx="80" ry="30" fill="url(#fishGradient)"/>
+  <!-- 鱼尾 -->
+  <path d="M580,280 L620,260 L620,300 Z" fill="url(#fishGradient)"/>
+  <!-- 鱼鳍 -->
+  <path d="M480,250 L490,230 L500,250" fill="#4682b4"/>
+  <path d="M480,310 L490,330 L500,310" fill="#4682b4"/>
+  <!-- 鱼眼 -->
+  <circle cx="460" cy="275" r="8" fill="#ffffff"/>
+  <circle cx="460" cy="275" r="4" fill="#000000"/>
+  
+  <!-- 虾 -->
+  <ellipse cx="350" cy="350" rx="50" ry="15" fill="#ffa500"/>
+  <path d="M300,350 Q290,345 285,350 Q290,355 300,350" fill="#ffa500"/>
+  <!-- 虾须 -->
+  <line x1="285" y1="345" x2="270" y2="340" stroke="#ff8c00" stroke-width="2"/>
+  <line x1="285" y1="355" x2="270" y2="360" stroke="#ff8c00" stroke-width="2"/>
+  <!-- 虾腿 -->
+  <line x1="320" y1="360" x2="315" y2="370" stroke="#ff8c00" stroke-width="1"/>
+  <line x1="330" y1="360" x2="325" y2="370" stroke="#ff8c00" stroke-width="1"/>
+  <line x1="340" y1="360" x2="335" y2="370" stroke="#ff8c00" stroke-width="1"/>
+  <line x1="350" y1="360" x2="345" y2="370" stroke="#ff8c00" stroke-width="1"/>
+  <line x1="360" y1="360" x2="355" y2="370" stroke="#ff8c00" stroke-width="1"/>
+  <line x1="370" y1="360" x2="365" y2="370" stroke="#ff8c00" stroke-width="1"/>
+  
+  <!-- 扇贝 -->
+  <path d="M450,350 Q470,330 490,350 Q470,370 450,350" fill="#dda0dd"/>
+  <path d="M455,350 L465,335 L475,350 L485,350 L475,365 L465,365 L455,350" stroke="#9370db" stroke-width="1" fill="none"/>
+  
+  <!-- 海带 -->
+  <path d="M200,200 Q220,180 240,200 Q260,220 280,200 Q300,180 320,200" stroke="#228b22" stroke-width="8" fill="none"/>
+  <path d="M210,220 Q230,200 250,220 Q270,240 290,220" stroke="#32cd32" stroke-width="6" fill="none"/>
+  
+  <!-- 紫菜 -->
+  <ellipse cx="150" cy="350" rx="40" ry="60" fill="#800080" opacity="0.7"/>
+  <ellipse cx="140" cy="340" rx="35" ry="50" fill="#9932cc" opacity="0.6"/>
+  
+  <!-- 小菜盘 -->
+  <ellipse cx="150" cy="150" rx="80" ry="60" fill="url(#plateGradient)" stroke="#ddd" stroke-width="2"/>
+  <!-- 蒜蓉 -->
+  <circle cx="130" cy="140" r="8" fill="#f5f5dc"/>
+  <circle cx="150" cy="135" r="6" fill="#f5f5dc"/>
+  <circle cx="170" cy="140" r="7" fill="#f5f5dc"/>
+  <circle cx="140" cy="160" r="5" fill="#f5f5dc"/>
+  <circle cx="160" cy="165" r="6" fill="#f5f5dc"/>
+  
+  <!-- 调料盘 -->
+  <ellipse cx="650" cy="150" rx="60" ry="40" fill="url(#plateGradient)" stroke="#ddd" stroke-width="2"/>
+  <!-- 生抽 -->
+  <ellipse cx="630" cy="145" rx="15" ry="10" fill="#8b4513"/>
+  <!-- 醋 -->
+  <ellipse cx="670" cy="145" rx="15" ry="10" fill="#2f4f4f"/>
+  <!-- 辣椒油 -->
+  <ellipse cx="650" cy="160" rx="12" ry="8" fill="#ff4500"/>
+  
+  <!-- 筷子 -->
+  <rect x="550" y="400" width="4" height="150" fill="#deb887" rx="2"/>
+  <rect x="560" y="400" width="4" height="150" fill="#deb887" rx="2"/>
+  
+  <!-- 装饰花边 -->
+  <circle cx="100" cy="100" r="3" fill="#ff69b4"/>
+  <circle cx="700" cy="100" r="3" fill="#ff69b4"/>
+  <circle cx="100" cy="500" r="3" fill="#ff69b4"/>
+  <circle cx="700" cy="500" r="3" fill="#ff69b4"/>
+  
+  <!-- 标题文字 -->
+  <text x="400" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="bold" fill="#8b4513">霞浦海鲜大餐</text>
+</svg>

@@ -1,0 +1,124 @@
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="seaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87ceeb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4682b4;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="boatGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#deb887;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b7355;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#87ceeb;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b0e0e6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 天空背景 -->
+  <rect width="800" height="300" fill="url(#skyGradient)"/>
+  
+  <!-- 海面 -->
+  <rect y="300" width="800" height="300" fill="url(#seaGradient)"/>
+  
+  <!-- 远山 -->
+  <path d="M0,250 Q200,200 400,250 Q600,200 800,250 L800,300 L0,300 Z" fill="#708090" opacity="0.6"/>
+  <path d="M100,280 Q300,230 500,280 Q700,240 800,280 L800,300 L100,300 Z" fill="#778899" opacity="0.4"/>
+  
+  <!-- 云朵 -->
+  <ellipse cx="150" cy="80" rx="40" ry="20" fill="#ffffff" opacity="0.8"/>
+  <ellipse cx="170" cy="75" rx="35" ry="18" fill="#ffffff" opacity="0.8"/>
+  <ellipse cx="130" cy="75" rx="30" ry="15" fill="#ffffff" opacity="0.8"/>
+  
+  <ellipse cx="600" cy="120" rx="50" ry="25" fill="#ffffff" opacity="0.7"/>
+  <ellipse cx="625" cy="115" rx="40" ry="20" fill="#ffffff" opacity="0.7"/>
+  <ellipse cx="575" cy="115" rx="35" ry="18" fill="#ffffff" opacity="0.7"/>
+  
+  <!-- 渔船 -->
+  <path d="M200,400 Q250,380 350,380 Q400,380 450,400 L450,420 Q400,440 350,440 Q250,440 200,420 Z" fill="url(#boatGradient)"/>
+  <rect x="220" y="380" width="210" height="15" fill="#654321"/>
+  <rect x="240" y="365" width="170" height="15" fill="#8b7355"/>
+  
+  <!-- 船舱 -->
+  <rect x="280" y="340" width="80" height="40" fill="#deb887" rx="5"/>
+  <rect x="290" y="350" width="15" height="20" fill="#4682b4" opacity="0.7"/>
+  <rect x="315" y="350" width="15" height="20" fill="#4682b4" opacity="0.7"/>
+  <rect x="340" y="350" width="15" height="20" fill="#4682b4" opacity="0.7"/>
+  
+  <!-- 桅杆 -->
+  <line x1="320" y1="340" x2="320" y2="200" stroke="#8b4513" stroke-width="6"/>
+  
+  <!-- 帆 -->
+  <path d="M325,210 Q380,190 380,250 Q380,290 325,310 Z" fill="#f5f5dc" opacity="0.9"/>
+  <path d="M325,220 L375,220 M325,240 L370,240 M325,260 L370,260 M325,280 L375,280 M325,300 L370,300" stroke="#ddd" stroke-width="1"/>
+  
+  <!-- 渔民1 - 撒网的渔民 -->
+  <ellipse cx="300" cy="370" rx="15" ry="25" fill="#fdbcb4"/>
+  <circle cx="300" cy="350" r="12" fill="#fdbcb4"/>
+  <!-- 帽子 -->
+  <ellipse cx="300" cy="345" rx="15" ry="8" fill="#4682b4"/>
+  <!-- 身体 -->
+  <rect x="290" y="365" width="20" height="30" fill="#1e90ff" rx="3"/>
+  <!-- 手臂 -->
+  <ellipse cx="280" cy="375" rx="8" ry="15" fill="#fdbcb4" transform="rotate(-30 280 375)"/>
+  <ellipse cx="320" cy="375" rx="8" ry="15" fill="#fdbcb4" transform="rotate(45 320 375)"/>
+  <!-- 腿 -->
+  <rect x="295" y="395" width="6" height="20" fill="#000080" rx="3"/>
+  <rect x="305" y="395" width="6" height="20" fill="#000080" rx="3"/>
+  
+  <!-- 渔民2 - 收网的渔民 -->
+  <ellipse cx="380" cy="370" rx="15" ry="25" fill="#fdbcb4"/>
+  <circle cx="380" cy="350" r="12" fill="#fdbcb4"/>
+  <!-- 帽子 -->
+  <ellipse cx="380" cy="345" rx="15" ry="8" fill="#ff6347"/>
+  <!-- 身体 -->
+  <rect x="370" y="365" width="20" height="30" fill="#32cd32" rx="3"/>
+  <!-- 手臂 -->
+  <ellipse cx="360" cy="375" rx="8" ry="15" fill="#fdbcb4" transform="rotate(-45 360 375)"/>
+  <ellipse cx="400" cy="375" rx="8" ry="15" fill="#fdbcb4" transform="rotate(30 400 375)"/>
+  <!-- 腿 -->
+  <rect x="375" y="395" width="6" height="20" fill="#8b4513" rx="3"/>
+  <rect x="385" y="395" width="6" height="20" fill="#8b4513" rx="3"/>
+  
+  <!-- 渔网 -->
+  <path d="M330,360 Q350,340 370,360 Q390,380 410,360 Q430,340 450,360" stroke="#696969" stroke-width="2" fill="none"/>
+  <path d="M335,370 Q355,350 375,370 Q395,390 415,370" stroke="#696969" stroke-width="2" fill="none"/>
+  <path d="M340,380 Q360,360 380,380 Q400,400 420,380" stroke="#696969" stroke-width="2" fill="none"/>
+  <!-- 网格 -->
+  <line x1="340" y1="350" x2="345" y2="370" stroke="#696969" stroke-width="1"/>
+  <line x1="350" y1="345" x2="355" y2="365" stroke="#696969" stroke-width="1"/>
+  <line x1="360" y1="350" x2="365" y2="370" stroke="#696969" stroke-width="1"/>
+  <line x1="370" y1="345" x2="375" y2="365" stroke="#696969" stroke-width="1"/>
+  <line x1="380" y1="350" x2="385" y2="370" stroke="#696969" stroke-width="1"/>
+  <line x1="390" y1="345" x2="395" y2="365" stroke="#696969" stroke-width="1"/>
+  <line x1="400" y1="350" x2="405" y2="370" stroke="#696969" stroke-width="1"/>
+  
+  <!-- 鱼篓 -->
+  <ellipse cx="250" cy="390" rx="20" ry="15" fill="#8b4513"/>
+  <ellipse cx="250" cy="385" rx="18" ry="12" fill="#a0522d"/>
+  <!-- 鱼篓中的鱼 -->
+  <ellipse cx="245" cy="388" rx="8" ry="4" fill="#4682b4"/>
+  <ellipse cx="255" cy="390" rx="6" ry="3" fill="#87ceeb"/>
+  
+  <!-- 水桶 -->
+  <rect x="410" y="385" width="25" height="20" fill="#708090" rx="3"/>
+  <ellipse cx="422.5" cy="385" rx="12.5" ry="6" fill="#b0c4de"/>
+  
+  <!-- 海鸥 -->
+  <path d="M100,150 Q105,145 110,150 Q105,155 100,150" fill="#ffffff"/>
+  <path d="M120,130 Q125,125 130,130 Q125,135 120,130" fill="#ffffff"/>
+  <path d="M500,180 Q505,175 510,180 Q505,185 500,180" fill="#ffffff"/>
+  <path d="M650,160 Q655,155 660,160 Q655,165 650,160" fill="#ffffff"/>
+  
+  <!-- 水波纹 -->
+  <path d="M0,450 Q100,440 200,450 T400,450 T600,450 T800,450" stroke="#ffffff" stroke-width="2" opacity="0.5" fill="none"/>
+  <path d="M0,480 Q150,470 300,480 T600,480 T800,480" stroke="#ffffff" stroke-width="2" opacity="0.3" fill="none"/>
+  <path d="M0,510 Q200,500 400,510 T800,510" stroke="#ffffff" stroke-width="2" opacity="0.4" fill="none"/>
+  
+  <!-- 远处的渔船 -->
+  <path d="M600,320 Q620,315 640,320 L640,325 Q620,330 600,325 Z" fill="#8b7355" opacity="0.6"/>
+  <line x1="620" y1="315" x2="620" y2="300" stroke="#654321" stroke-width="2" opacity="0.6"/>
+  <path d="M622,305 Q630,300 630,310 Z" fill="#f5f5dc" opacity="0.5"/>
+  
+  <!-- 标题文字 -->
+  <text x="400" y="570" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" opacity="0.9">霞浦渔民劳作</text>
+</svg>
