@@ -692,13 +692,13 @@ class ImageSearchDemo {
 // 全局实例
 let imageSearchDemo;
 
-// 页面加载完成后初始化
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-        imageSearchDemo = new ImageSearchDemo();
-    });
-} else {
-    imageSearchDemo = new ImageSearchDemo();
-}
+// 页面加载完成后初始化 - 已禁用以避免与主搜索功能冲突
+// if (document.readyState === 'loading') {
+//     document.addEventListener('DOMContentLoaded', () => {
+//         imageSearchDemo = new ImageSearchDemo();
+//     });
+// } else {
+//     imageSearchDemo = new ImageSearchDemo();
+// }
 
 console.log('🔍 图片搜索演示模块已加载');

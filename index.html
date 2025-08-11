@@ -2,10 +2,24 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="description" content="探索福建霞浦，中国最美滩涂摄影天堂。体验渔家文化，品尝海鲜美食，感受自然魅力。提供详细的旅游攻略、摄影指南和交通信息。">
     <meta name="keywords" content="霞浦,滩涂,摄影,旅游,福建,海鲜,渔家文化,日出日落,北岐,杨家溪">
     <meta name="author" content="霞浦旅游局">
+    
+    <!-- 移动端优化 -->
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="霞浦旅游">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="msapplication-TileColor" content="#0ea5e9">
+    
+    <!-- DNS 预解析优化 -->
+    <link rel="dns-prefetch" href="//cdn.tailwindcss.com">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="//zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn">
     <meta property="og:title" content="霞浦 - 中国最美滩涂摄影天堂">
     <meta property="og:description" content="探索福建霞浦，中国最美滩涂摄影天堂。体验渔家文化，品尝海鲜美食，感受自然魅力。">
     <meta property="og:type" content="website">
@@ -30,6 +44,12 @@
     <script src="/image-manager.js"></script>
     <!-- 图片搜索演示 -->
     <script src="/image-search-demo.js"></script>
+    <!-- 移动端调试工具 -->
+    <script src="/mobile-debug.js"></script>
+    <!-- 海洋音效生成器 -->
+    <script src="/ocean-audio.js"></script>
+    <!-- 音频管理器 -->
+    <script src="/audio-manager.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -264,6 +284,214 @@
             }
         }
         
+        /* 移动端触摸优化 */
+        @media (max-width: 768px) {
+            /* 增大触摸目标 */
+            button, .btn, a {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 12px 16px;
+            }
+            
+            /* 优化文字大小 */
+            body {
+                font-size: 16px;
+                line-height: 1.6;
+            }
+            
+            /* 防止横屏时缩放 */
+            html {
+                -webkit-text-size-adjust: 100%;
+            }
+        }
+        
+        /* 音频控制面板样式优化 */
+        #audio-controls {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        #audio-controls-mini {
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(14, 165, 233, 0.3);
+        }
+        
+        /* 音频提示样式 */
+        #audio-hint {
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        #audio-controls button:hover {
+            transform: scale(1.05);
+        }
+        
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            #audio-controls {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.75rem;
+            }
+            
+            #audio-controls .hidden {
+                display: none !important;
+            }
+        }
+        
+        #audio-controls-mini {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        #audio-hint {
+            max-width: 280px;
+        }
+        
+        #audio-hint:hover {
+            transform: translateX(0);
+        }
+        
+        /* 音频按钮动画 */
+        #enable-audio-btn {
+            transition: all 0.2s ease;
+        }
+        
+        #enable-audio-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+        }
+        
+        /* 移动端音频提示调整 */
+        @media (max-width: 640px) {
+            #audio-hint {
+                top: 4rem;
+                right: 1rem;
+                max-width: calc(100vw - 2rem);
+            }
+        }
+        
+        /* 音量滑块样式 */
+        #volume-slider {
+            background: linear-gradient(to right, #0ea5e9 0%, #0ea5e9 30%, #e5e7eb 30%, #e5e7eb 100%);
+            transition: all 0.2s ease;
+        }
+        
+        #volume-slider:hover {
+            transform: scaleY(1.2);
+        }
+        
+        #volume-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(14, 165, 233, 0.4);
+            transition: all 0.2s ease;
+        }
+        
+        #volume-slider::-webkit-slider-thumb:hover {
+            background: #0284c7;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(14, 165, 233, 0.6);
+        }
+        
+        #volume-slider::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #0ea5e9;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(14, 165, 233, 0.4);
+            transition: all 0.2s ease;
+        }
+        
+        #volume-slider::-moz-range-thumb:hover {
+            background: #0284c7;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(14, 165, 233, 0.6);
+        }
+        
+        /* 进度条样式 */
+        #progress-bar {
+            background: linear-gradient(90deg, #0ea5e9, #f97316);
+            transition: width 0.3s ease;
+        }
+        
+        /* 音频控制按钮悬停效果 */
+        #audio-controls button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 移动端音频控制优化 */
+        @media (max-width: 640px) {
+            #audio-controls {
+                bottom: 20px;
+                right: 20px;
+                left: 20px;
+                padding: 16px;
+            }
+            
+            #audio-controls .hidden {
+                display: block !important;
+            }
+            
+            #audio-controls-mini {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+        
+        /* 音频提示样式 */
+        #audio-hint {
+            animation: slideInRight 0.5s ease-out;
+            z-index: 40;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        #audio-hint:hover {
+            transform: translateX(-5px) !important;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        #enable-audio-btn {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* 移动端音频提示优化 */
+        @media (max-width: 640px) {
+            #audio-hint {
+                top: 80px;
+                right: 20px;
+                left: 20px;
+                max-width: none;
+            }
+        }
+        
         /* 搜索历史样式 */
         .search-history-item {
             transition: all 0.2s ease-in-out;
@@ -386,6 +614,25 @@
         </div>
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-white animate-bounce">
             <i class="fas fa-chevron-down text-2xl"></i>
+        </div>
+        
+        <!-- 音频提示 -->
+        <div id="audio-hint" class="absolute top-20 right-6 bg-white/90 backdrop-blur-md rounded-xl shadow-lg p-4 max-w-xs transform translate-x-full transition-all duration-500">
+            <div class="flex items-start space-x-3">
+                <div class="w-6 h-6 bg-ocean-blue rounded-full flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-music text-white text-xs"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-semibold text-gray-800 text-sm mb-1">沉浸式体验</h4>
+                    <p class="text-gray-600 text-xs mb-2">开启背景音乐，感受霞浦海洋的宁静之美</p>
+                    <button id="enable-audio-btn" class="bg-ocean-blue text-white text-xs px-3 py-1 rounded-full hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-play mr-1"></i>开启音乐
+                    </button>
+                </div>
+                <button id="close-audio-hint" class="text-gray-400 hover:text-gray-600 text-xs">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
         </div>
     </section>
 

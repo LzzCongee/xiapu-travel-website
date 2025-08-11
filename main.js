@@ -366,13 +366,13 @@ function initSmoothScroll() {
     });
 }
 
-// 移动端菜单
-function initMobileMenu() {
+// 移动端菜单切换函数（全局）
+function toggleMobileMenu() {
     const mobileMenuBtn = document.querySelector('.md\\:hidden button');
     const navMenu = document.querySelector('nav .hidden.md\\:flex');
     
     if (mobileMenuBtn && navMenu) {
-        mobileMenuBtn.addEventListener('click', function() {
+        try {
             navMenu.classList.toggle('hidden');
             navMenu.classList.toggle('flex');
             navMenu.classList.toggle('flex-col');
@@ -383,6 +383,44 @@ function initMobileMenu() {
             navMenu.classList.toggle('bg-white');
             navMenu.classList.toggle('shadow-lg');
             navMenu.classList.toggle('p-4');
+            navMenu.classList.toggle('z-50');
+            
+            // 更新按钮状态
+            const isOpen = !navMenu.classList.contains('hidden');
+            mobileMenuBtn.setAttribute('aria-expanded', isOpen);
+            
+            // 防止背景滚动
+            if (isOpen) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        } catch (error) {
+            console.warn('移动端菜单切换失败:', error);
+        }
+    }
+}
+
+// 移动端菜单初始化
+function initMobileMenu() {
+    const mobileMenuBtn = document.querySelector('.md\\:hidden button');
+    const navMenu = document.querySelector('nav .hidden.md\\:flex');
+    
+    if (mobileMenuBtn && navMenu) {
+        // 添加触摸支持
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        mobileMenuBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            toggleMobileMenu();
+        });
+        
+        // 点击外部关闭菜单
+        document.addEventListener('click', function(e) {
+            if (!mobileMenuBtn.contains(e.target) && !navMenu.contains(e.target)) {
+                if (!navMenu.classList.contains('hidden')) {
+                    toggleMobileMenu();
+                }
+            }
         });
     }
 }
@@ -1199,7 +1237,7 @@ function openAttractionMap(attraction) {
 // 创建模态框
 function createModal(title, content) {
     const modal = document.createElement('div');
-    modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300';
+    modal.className = 'modal-overlay fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 opacity-0 transition-opacity duration-300';
     modal.innerHTML = `
         <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto transform scale-95 transition-transform duration-300 shadow-2xl">
             <div class="flex items-center justify-between p-6 border-b bg-gradient-to-r from-blue-50 to-indigo-50">
@@ -1972,41 +2010,7 @@ function handleSearchResultClick(title, type) {
 
 // 重复的showNotification函数已删除，使用第1487行的原始函数
 
-// 移动端菜单切换
-function toggleMobileMenu() {
-    const nav = document.querySelector('nav');
-    let mobileMenu = document.getElementById('mobile-menu');
-    
-    if (!mobileMenu) {
-        // 创建移动端菜单
-        mobileMenu = document.createElement('div');
-        mobileMenu.id = 'mobile-menu';
-        mobileMenu.className = 'md:hidden bg-white border-t border-gray-200 shadow-lg';
-        mobileMenu.innerHTML = `
-            <div class="px-4 py-3 space-y-2">
-                <a href="#hero" class="block py-2 text-gray-700 hover:text-ocean-blue transition-colors">首页</a>
-                <a href="#scenery" class="block py-2 text-gray-700 hover:text-ocean-blue transition-colors">自然风光</a>
-                <a href="#culture" class="block py-2 text-gray-700 hover:text-ocean-blue transition-colors">渔业文化</a>
-                <a href="#photography" class="block py-2 text-gray-700 hover:text-ocean-blue transition-colors">摄影天堂</a>
-                <a href="#food" class="block py-2 text-gray-700 hover:text-ocean-blue transition-colors">美食特产</a>
-                <div class="pt-2 border-t border-gray-200">
-                    <button class="w-full text-left py-2 text-gray-700 hover:text-ocean-blue transition-colors flex items-center" onclick="showSearchModal()">
-                        <i class="fas fa-search mr-2"></i>
-                        搜索霞浦
-                    </button>
-                </div>
-            </div>
-        `;
-        nav.appendChild(mobileMenu);
-    } else {
-        // 切换显示/隐藏
-        if (mobileMenu.style.display === 'none' || !mobileMenu.style.display) {
-            mobileMenu.style.display = 'block';
-        } else {
-            mobileMenu.style.display = 'none';
-        }
-    }
-}
+// 重复的toggleMobileMenu函数已删除，使用第382行的原始函数
 
 // 视频播放控制
 function toggleVideoPlayback() {
@@ -2062,5 +2066,12 @@ document.addEventListener('touchend', function(e) {
         }
     }
 });
+
+// 将需要在HTML中调用的函数暴露到全局作用域
+window.showSearchModal = showSearchModal;
+window.toggleMobileMenu = toggleMobileMenu;
+window.handleSearchResultClick = handleSearchResultClick;
+window.performSearch = performSearch;
+window.retryAllFailedImages = retryAllFailedImages;
 
 console.log('霞浦宣传网站已加载完成 🌊📸');
