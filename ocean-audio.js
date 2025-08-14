@@ -17,21 +17,54 @@ class OceanAudioGenerator {
         };
         this.volume = 0.3;
         this.currentScene = 'calm'; // calm, sunrise, stormy
+        this.isInitialized = false;
     }
     
     async init() {
         try {
+            // 检查Web Audio API支持
+            if (!window.AudioContext && !window.webkitAudioContext) {
+                console.warn('Web Audio API 不支持');
+                return false;
+            }
+            
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // 检查音频上下文状态
+            if (this.audioContext.state === 'suspended') {
+                console.log('音频上下文已暂停，等待用户交互激活');
+            }
+            
             this.masterGain = this.audioContext.createGain();
             this.masterGain.gain.value = this.volume;
             this.masterGain.connect(this.audioContext.destination);
             
-            console.log('海洋音效生成器初始化成功');
+            this.isInitialized = true;
+            console.log('✅ 海洋音效生成器初始化成功');
             return true;
         } catch (error) {
-            console.warn('Web Audio API 不支持:', error);
+            console.warn('❌ Web Audio API 初始化失败:', error);
             return false;
         }
+    }
+    
+    // 确保音频上下文已激活
+    async ensureAudioContextActive() {
+        if (!this.audioContext) {
+            return false;
+        }
+        
+        if (this.audioContext.state === 'suspended') {
+            try {
+                await this.audioContext.resume();
+                console.log('音频上下文已激活');
+            } catch (error) {
+                console.warn('激活音频上下文失败:', error);
+                return false;
+            }
+        }
+        
+        return true;
     }
     
     // 生成海浪声
@@ -225,6 +258,68 @@ class OceanAudioGenerator {
         this.sources = [];
         this.effects = { waves: null, seagulls: null, wind: null, bubbles: null };
         this.isPlaying = false;
+    }
+    
+    // 停止播放并清理资源
+    stop() {
+        if (!this.isInitialized) return;
+        
+        this.isPlaying = false;
+        
+        // 停止所有音频源
+        this.sources.forEach(source => {
+            try {
+                if (source.stop) {
+                    source.stop();
+                }
+                if (source.disconnect) {
+                    source.disconnect();
+                }
+            } catch (error) {
+                console.warn('停止音频源时出错:', error);
+            }
+        });
+        this.sources = [];
+        
+        // 清理效果
+        Object.keys(this.effects).forEach(key => {
+            if (this.effects[key] && this.effects[key].disconnect) {
+                try {
+                    this.effects[key].disconnect();
+                } catch (error) {
+                    console.warn('断开音频效果时出错:', error);
+                }
+            }
+            this.effects[key] = null;
+        });
+        
+        console.log('海洋音效已停止并清理资源');
+    }
+    
+    // 清理资源
+    cleanup() {
+        this.stop();
+        
+        if (this.masterGain) {
+            try {
+                this.masterGain.disconnect();
+            } catch (error) {
+                console.warn('断开主增益节点时出错:', error);
+            }
+            this.masterGain = null;
+        }
+        
+        if (this.audioContext && this.audioContext.state !== 'closed') {
+            try {
+                this.audioContext.close();
+            } catch (error) {
+                console.warn('关闭音频上下文时出错:', error);
+            }
+        }
+        
+        this.audioContext = null;
+        this.isInitialized = false;
+        console.log('海洋音效生成器资源已清理');
     }
     
     // 设置音量

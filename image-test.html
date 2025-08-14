@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片加载测试 - 霞浦旅游</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .test-image {
+            transition: all 0.3s ease;
+        }
+        .test-image.loading {
+            opacity: 0.5;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        .test-image.success {
+            border: 2px solid #10b981;
+        }
+        .test-image.error {
+            border: 2px solid #ef4444;
+            background: #fee2e2;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-image mr-2 text-blue-500"></i>
+                图片加载测试
+            </h1>
+            <p class="text-gray-600 mb-6">测试霞浦旅游网站的所有图片资源是否正常加载</p>
+            
+            <div class="flex flex-wrap gap-4 mb-6">
+                <button id="test-all" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    <i class="fas fa-play mr-2"></i>开始测试
+                </button>
+                <button id="retry-failed" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">
+                    <i class="fas fa-redo mr-2"></i>重试失败
+                </button>
+                <button id="clear-results" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                    <i class="fas fa-trash mr-2"></i>清空结果
+                </button>
+            </div>
+            
+            <div id="test-summary" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-blue-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-blue-600" id="total-count">0</div>
+                    <div class="text-sm text-blue-800">总数</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-green-600" id="success-count">0</div>
+                    <div class="text-sm text-green-800">成功</div>
+                </div>
+                <div class="bg-red-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-red-600" id="error-count">0</div>
+                    <div class="text-sm text-red-800">失败</div>
+                </div>
+                <div class="bg-yellow-50 p-4 rounded-lg text-center">
+                    <div class="text-2xl font-bold text-yellow-600" id="success-rate">0%</div>
+                    <div class="text-sm text-yellow-800">成功率</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 日出类图片 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-sun mr-2 text-orange-500"></i>
+                    日出美景
+                </h2>
+                <div id="sunrise-images" class="space-y-4"></div>
+            </div>
+            
+            <!-- 海鲜美食图片 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-fish mr-2 text-blue-500"></i>
+                    海鲜美食
+                </h2>
+                <div id="seafood-images" class="space-y-4"></div>
+            </div>
+            
+            <!-- 渔民劳作图片 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-user-hard-hat mr-2 text-green-500"></i>
+                    渔民劳作
+                </h2>
+                <div id="fisherman-images" class="space-y-4"></div>
+            </div>
+            
+            <!-- 水产养殖图片 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-seedling mr-2 text-purple-500"></i>
+                    水产养殖
+                </h2>
+                <div id="aquaculture-images" class="space-y-4"></div>
+            </div>
+            
+            <!-- 备用图片 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-shield-alt mr-2 text-gray-500"></i>
+                    备用图片
+                </h2>
+                <div id="fallback-images" class="space-y-4"></div>
+            </div>
+            
+            <!-- 测试日志 -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-list mr-2 text-indigo-500"></i>
+                    测试日志
+                </h2>
+                <div id="test-log" class="space-y-2 max-h-96 overflow-y-auto"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ImageTester {
+            constructor() {
+                this.imageUrls = {
+                    sunrise: [
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/bf59f861-e90a-4ea2-a9fa-dcf3e69dc92e/image_1755134224_6_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/e06b0934-933b-422b-b7f2-9ea347ef23c0/image_1755134224_3_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/d1e3efd9-970a-4c5e-9505-c04e5a3d90d9/image_1755134225_2_1.png'
+                    ],
+                    seafood: [
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/be5cd14b-b32d-4feb-9a90-f4b7689b2c37/image_1755134233_2_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/b59c6d54-3f54-4b1e-8e60-ed678100b416/image_1755134233_4_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/2f9f807d-50b5-4f7a-af75-acfba5b287b4/image_1755134233_3_1.jpg'
+                    ],
+                    fisherman: [
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/5b29f661-74f3-485a-a963-d31da816e0ef/image_1755134239_6_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/feffba5e-1805-45bb-a5b2-0bf73b9c9cdf/image_1755134239_3_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/338bbdb5-0304-4f57-abc4-3a5eca51c83f/image_1755134240_5_1.jpg'
+                    ],
+                    aquaculture: [
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/cc9cc7e8-35e9-41a5-b2b3-22fc7d3ff8b5/image_1755134245_1_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/00cee557-a873-48fe-93f4-9255b39c6ef8/image_1755134245_6_1.jpg',
+                        'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/304c95f5-50d2-4a2b-87fd-a7327487779b/image_1755134245_3_1.jpg'
+                    ],
+                    fallback: [
+                        '/images/fallback-sunrise.svg',
+                        '/images/fallback-seafood.svg',
+                        '/images/fallback-fisherman.svg',
+                        '/images/fallback-landscape.svg'
+                    ]
+                };
+                
+                this.testResults = {
+                    total: 0,
+                    success: 0,
+                    error: 0,
+                    details: []
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.renderImageContainers();
+                console.log('✅ 图片测试工具已初始化');
+            }
+            
+            bindEvents() {
+                document.getElementById('test-all').addEventListener('click', () => this.testAllImages());
+                document.getElementById('retry-failed').addEventListener('click', () => this.retryFailedImages());
+                document.getElementById('clear-results').addEventListener('click', () => this.clearResults());
+            }
+            
+            renderImageContainers() {
+                Object.keys(this.imageUrls).forEach(category => {
+                    const container = document.getElementById(`${category}-images`);
+                    if (!container) return;
+                    
+                    this.imageUrls[category].forEach((url, index) => {
+                        const imageContainer = document.createElement('div');
+                        imageContainer.className = 'border rounded-lg p-3';
+                        imageContainer.innerHTML = `
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm font-medium text-gray-700">${category}-${index + 1}</span>
+                                <span class="status-badge px-2 py-1 rounded text-xs">待测试</span>
+                            </div>
+                            <img class="test-image w-full h-32 object-cover rounded" 
+                                 data-url="${url}" 
+                                 data-category="${category}"
+                                 data-index="${index}"
+                                 alt="${category} ${index + 1}">
+                            <div class="mt-2 text-xs text-gray-500 break-all">${url}</div>
+                        `;
+                        container.appendChild(imageContainer);
+                    });
+                });
+            }
+            
+            async testAllImages() {
+                this.log('开始测试所有图片...');
+                this.clearResults();
+                
+                const images = document.querySelectorAll('.test-image');
+                this.testResults.total = images.length;
+                
+                for (let img of images) {
+                    await this.testSingleImage(img);
+                }
+                
+                this.updateSummary();
+                this.log(`测试完成！成功: ${this.testResults.success}, 失败: ${this.testResults.error}`);
+            }
+            
+            async testSingleImage(img) {
+                const url = img.dataset.url;
+                const category = img.dataset.category;
+                const index = img.dataset.index;
+                const container = img.parentElement;
+                const statusBadge = container.querySelector('.status-badge');
+                
+                // 设置加载状态
+                img.className = 'test-image w-full h-32 object-cover rounded loading';
+                statusBadge.textContent = '测试中...';
+                statusBadge.className = 'status-badge px-2 py-1 rounded text-xs bg-blue-100 text-blue-800';
+                
+                try {
+                    await this.loadImage(url);
+                    
+                    // 成功
+                    img.src = url;
+                    img.className = 'test-image w-full h-32 object-cover rounded success';
+                    statusBadge.textContent = '成功';
+                    statusBadge.className = 'status-badge px-2 py-1 rounded text-xs bg-green-100 text-green-800';
+                    
+                    this.testResults.success++;
+                    this.testResults.details.push({
+                        url,
+                        category,
+                        index,
+                        status: 'success',
+                        message: '加载成功'
+                    });
+                    
+                    this.log(`✅ ${category}-${parseInt(index) + 1} 加载成功`);
+                    
+                } catch (error) {
+                    // 失败
+                    img.className = 'test-image w-full h-32 object-cover rounded error';
+                    statusBadge.textContent = '失败';
+                    statusBadge.className = 'status-badge px-2 py-1 rounded text-xs bg-red-100 text-red-800';
+                    
+                    this.testResults.error++;
+                    this.testResults.details.push({
+                        url,
+                        category,
+                        index,
+                        status: 'error',
+                        message: error.message || '加载失败'
+                    });
+                    
+                    this.log(`❌ ${category}-${parseInt(index) + 1} 加载失败: ${error.message}`);
+                }
+                
+                this.updateSummary();
+            }
+            
+            loadImage(url) {
+                return new Promise((resolve, reject) => {
+                    const img = new Image();
+                    img.onload = () => resolve();
+                    img.onerror = () => reject(new Error('图片加载失败'));
+                    img.src = url;
+                    
+                    setTimeout(() => reject(new Error('加载超时')), 10000);
+                });
+            }
+            
+            async retryFailedImages() {
+                const failedImages = document.querySelectorAll('.test-image.error');
+                if (failedImages.length === 0) {
+                    this.log('没有失败的图片需要重试');
+                    return;
+                }
+                
+                this.log(`重试 ${failedImages.length} 张失败的图片...`);
+                
+                for (let img of failedImages) {
+                    await this.testSingleImage(img);
+                }
+            }
+            
+            clearResults() {
+                this.testResults = {
+                    total: 0,
+                    success: 0,
+                    error: 0,
+                    details: []
+                };
+                
+                // 重置所有图片状态
+                const images = document.querySelectorAll('.test-image');
+                images.forEach(img => {
+                    img.className = 'test-image w-full h-32 object-cover rounded';
+                    img.src = '';
+                    const statusBadge = img.parentElement.querySelector('.status-badge');
+                    statusBadge.textContent = '待测试';
+                    statusBadge.className = 'status-badge px-2 py-1 rounded text-xs bg-gray-100 text-gray-800';
+                });
+                
+                this.updateSummary();
+                document.getElementById('test-log').innerHTML = '';
+            }
+            
+            updateSummary() {
+                document.getElementById('total-count').textContent = this.testResults.total;
+                document.getElementById('success-count').textContent = this.testResults.success;
+                document.getElementById('error-count').textContent = this.testResults.error;
+                
+                const successRate = this.testResults.total > 0 
+                    ? ((this.testResults.success / this.testResults.total) * 100).toFixed(1)
+                    : 0;
+                document.getElementById('success-rate').textContent = successRate + '%';
+            }
+            
+            log(message) {
+                const logContainer = document.getElementById('test-log');
+                const logEntry = document.createElement('div');
+                logEntry.className = 'text-sm p-2 bg-gray-50 rounded';
+                logEntry.innerHTML = `
+                    <span class="text-gray-500">${new Date().toLocaleTimeString()}</span>
+                    <span class="ml-2">${message}</span>
+                `;
+                logContainer.insertBefore(logEntry, logContainer.firstChild);
+            }
+        }
+        
+        // 初始化测试工具
+        const imageTester = new ImageTester();
+    </script>
+</body>
+</html>

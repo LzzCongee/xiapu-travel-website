@@ -12,6 +12,8 @@ class AudioManager {
         this.currentTrack = 0;
         this.isInitialized = false;
         this.fadeInterval = null;
+        this.initializationAttempts = 0;
+        this.maxInitializationAttempts = 3;
         
         // 海洋音效生成器
         this.oceanGenerator = null;
@@ -38,13 +40,37 @@ class AudioManager {
             }
         ];
         
-        this.init();
+        // 延迟初始化，等待用户交互
+        this.delayedInit();
+    }
+    
+    delayedInit() {
+        // 等待页面完全加载
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.init());
+        } else {
+            // 延迟一段时间再初始化，确保其他依赖已加载
+            setTimeout(() => this.init(), 500);
+        }
     }
     
     async init() {
+        if (this.isInitialized || this.initializationAttempts >= this.maxInitializationAttempts) {
+            return;
+        }
+        
+        this.initializationAttempts++;
+        
         try {
             // 创建音频控制界面
             this.createAudioControls();
+            
+            // 检查海洋音效生成器是否可用
+            if (typeof OceanAudioGenerator === 'undefined') {
+                console.warn('海洋音效生成器未加载，等待重试...');
+                setTimeout(() => this.init(), 1000);
+                return;
+            }
             
             // 初始化海洋音效生成器
             this.oceanGenerator = new OceanAudioGenerator();
@@ -54,13 +80,35 @@ class AudioManager {
                 // 设置初始场景
                 this.updateTrackInfo(this.tracks[0]);
                 this.isInitialized = true;
-                console.log('音频管理器初始化成功 - 使用海洋音效生成器');
+                
+                // 设置资源清理
+                this.setupCleanupOnUnload();
+                
+                console.log('✅ 音频管理器初始化成功 - 使用海洋音效生成器');
+                
+                // 显示音频提示
+                setTimeout(() => {
+                    if (typeof window.showAudioHint === 'function') {
+                        window.showAudioHint();
+                    } else if (document.getElementById('audio-hint')) {
+                        const audioHint = document.getElementById('audio-hint');
+                        audioHint.style.display = 'block';
+                        audioHint.classList.add('animate-pulse');
+                    }
+                }, 2000);
             } else {
                 throw new Error('海洋音效生成器初始化失败');
             }
         } catch (error) {
-            console.warn('音频初始化失败:', error);
-            this.hideAudioControls();
+            console.warn(`❌ 音频初始化失败 (尝试 ${this.initializationAttempts}/${this.maxInitializationAttempts}):`, error);
+            
+            if (this.initializationAttempts < this.maxInitializationAttempts) {
+                // 重试初始化
+                setTimeout(() => this.init(), 2000);
+            } else {
+                // 最终失败，隐藏音频控制
+                this.hideAudioControls();
+            }
         }
     }
     
@@ -73,6 +121,13 @@ class AudioManager {
     }
     
     createAudioControls() {
+        // 检查是否已经存在音频控制器，避免重复创建
+        if (document.getElementById('audio-controls') || document.getElementById('audio-controls-mini')) {
+            console.log('音频控制器已存在，跳过创建');
+            this.bindAudioEvents();
+            return;
+        }
+        
         // 创建音频控制面板
         const controlsHTML = `
             <div id="audio-controls" class="fixed bottom-6 right-6 z-50 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-4 transition-all duration-300 transform translate-y-0">
@@ -424,35 +479,63 @@ class AudioManager {
         
         return 'hero';
     }
+    
+    // 清理资源
+    cleanup() {
+        // 停止播放
+        if (this.isPlaying) {
+            this.stop();
+        }
+        
+        // 清理海洋音效生成器
+        if (this.oceanGenerator) {
+            this.oceanGenerator.cleanup();
+            this.oceanGenerator = null;
+        }
+        
+        // 清理淡入淡出定时器
+        if (this.fadeInterval) {
+            clearInterval(this.fadeInterval);
+            this.fadeInterval = null;
+        }
+        
+        // 移除音频控制界面
+        const controls = document.getElementById('audio-controls');
+        if (controls) {
+            controls.remove();
+        }
+        
+        const hint = document.getElementById('audio-hint');
+        if (hint) {
+            hint.remove();
+        }
+        
+        // 重置状态
+        this.isInitialized = false;
+        this.isPlaying = false;
+        this.currentTrack = 0;
+        
+        console.log('音频管理器资源已清理');
+    }
+    
+    // 页面卸载时清理资源
+    setupCleanupOnUnload() {
+        window.addEventListener('beforeunload', () => {
+            this.cleanup();
+        });
+        
+        // 页面隐藏时暂停播放
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && this.isPlaying) {
+                this.pause();
+            }
+        });
+    }
 }
 
 // 全局音频管理器实例
+// 全局音频管理器实例（由main.js统一管理）
 let audioManager = null;
-
-// 页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', () => {
-    // 延迟初始化，避免影响页面加载性能
-    setTimeout(() => {
-        audioManager = new AudioManager();
-        
-        // 显示音频提示
-        setTimeout(() => {
-            showAudioHint();
-        }, 3000);
-        
-        // 监听滚动事件，根据内容调整音乐
-        let scrollTimeout;
-        window.addEventListener('scroll', () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                if (audioManager && audioManager.isPlaying) {
-                    audioManager.adaptToContent();
-                }
-            }, 1000);
-        });
-        
-    }, 2000);
-});
 
 // 显示音频提示
 function showAudioHint() {
@@ -495,3 +578,5 @@ function hideAudioHint() {
 
 // 导出供其他模块使用
 window.AudioManager = AudioManager;
+window.showAudioHint = showAudioHint;
+window.hideAudioHint = hideAudioHint;

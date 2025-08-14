@@ -1,5 +1,35 @@
 // 主要的JavaScript功能模块
 
+// 全局变量初始化 - 确保所有变量都有默认值
+let weatherService = null;
+let loadingManager = null;
+let imageManager = null;
+let audioManager = null;
+let videoGenerator = null;
+
+// 初始化状态跟踪
+const initializationState = {
+    weatherService: false,
+    loadingManager: false,
+    imageManager: false,
+    audioManager: false,
+    videoGenerator: false
+};
+
+// 安全的初始化函数
+function safeInitialize(name, initFunction) {
+    try {
+        const result = initFunction();
+        initializationState[name] = true;
+        console.log(`✅ ${name} 初始化成功`);
+        return result;
+    } catch (error) {
+        console.error(`❌ ${name} 初始化失败:`, error);
+        initializationState[name] = false;
+        return null;
+    }
+}
+
 // 图片管理系统已在 image-manager.js 中实现
 
 // 天气API集成
@@ -9,6 +39,101 @@ class WeatherService {
         this.location = '霞浦县';
         this.cache = new Map();
         this.cacheTimeout = 30 * 60 * 1000; // 30分钟缓存
+        this.updateInterval = null;
+        this.autoUpdateEnabled = true;
+        this.lastUpdateTime = null;
+        this.updateCallbacks = new Set();
+        
+        // 启动自动更新
+        this.startAutoUpdate();
+    }
+    
+    // 启动自动更新
+    startAutoUpdate() {
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+        }
+        
+        // 每10分钟自动更新一次天气
+        this.updateInterval = setInterval(() => {
+            if (this.autoUpdateEnabled) {
+                this.forceUpdate();
+            }
+        }, 10 * 60 * 1000);
+        
+        console.log('🌤️ 天气自动更新已启动 (每10分钟)');
+    }
+    
+    // 停止自动更新
+    stopAutoUpdate() {
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+            this.updateInterval = null;
+        }
+        console.log('🌤️ 天气自动更新已停止');
+    }
+    
+    // 添加更新回调
+    onUpdate(callback) {
+        this.updateCallbacks.add(callback);
+    }
+    
+    // 移除更新回调
+    offUpdate(callback) {
+        this.updateCallbacks.delete(callback);
+    }
+    
+    // 通知所有回调
+    notifyUpdate(weatherData) {
+        this.updateCallbacks.forEach(callback => {
+            try {
+                callback(weatherData);
+            } catch (error) {
+                console.error('天气更新回调执行失败:', error);
+            }
+        });
+    }
+    
+    // 强制更新天气数据
+    async forceUpdate() {
+        console.log('🔄 强制更新天气数据...');
+        
+        // 清除缓存
+        const cacheKey = `weather_${this.location}`;
+        this.cache.delete(cacheKey);
+        
+        try {
+            const weatherData = await this.getCurrentWeather();
+            this.lastUpdateTime = new Date();
+            this.notifyUpdate(weatherData);
+            console.log('✅ 天气数据更新成功');
+            return weatherData;
+        } catch (error) {
+            console.error('❌ 天气数据更新失败:', error);
+            throw error;
+        }
+    }
+    
+    // 获取上次更新时间
+    getLastUpdateTime() {
+        return this.lastUpdateTime;
+    }
+    
+    // 格式化更新时间
+    getFormattedUpdateTime() {
+        if (!this.lastUpdateTime) return '未更新';
+        
+        const now = new Date();
+        const diff = now - this.lastUpdateTime;
+        const minutes = Math.floor(diff / (1000 * 60));
+        
+        if (minutes < 1) return '刚刚更新';
+        if (minutes < 60) return `${minutes}分钟前更新`;
+        
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}小时前更新`;
+        
+        return this.lastUpdateTime.toLocaleDateString();
     }
     
     async getCurrentWeather() {
@@ -27,6 +152,11 @@ class WeatherService {
                 data: weatherData,
                 timestamp: Date.now()
             });
+            
+            // 如果是首次加载，设置更新时间
+            if (!this.lastUpdateTime) {
+                this.lastUpdateTime = new Date();
+            }
             
             return weatherData;
         } catch (error) {
@@ -50,7 +180,8 @@ class WeatherService {
             windDirection: windDirections[Math.floor(Math.random() * windDirections.length)],
             windSpeed: windSpeeds[Math.floor(Math.random() * windSpeeds.length)],
             humidity: Math.floor(Math.random() * 40) + 40, // 40-80%
-            icon: '☀️'
+            icon: '☀️',
+            updateTime: new Date().toLocaleString()
         };
     }
     
@@ -61,8 +192,16 @@ class WeatherService {
             windDirection: '南风',
             windSpeed: '5-6级',
             humidity: 60,
-            icon: '☀️'
+            icon: '☀️',
+            updateTime: new Date().toLocaleString()
         };
+    }
+    
+    // 销毁服务
+    destroy() {
+        this.stopAutoUpdate();
+        this.updateCallbacks.clear();
+        this.cache.clear();
     }
 }
 
@@ -110,8 +249,10 @@ class LoadingManager {
 
 // 全局实例
 // 懒加载已迁移到 image-manager.js
-const weatherService = new WeatherService();
-const loadingManager = new LoadingManager();
+// loadingManager已在文件顶部声明，这里直接初始化
+if (!loadingManager) {
+    loadingManager = new LoadingManager();
+}
 
 // 打开腾讯地图
 function openInteractiveMap() {
@@ -161,6 +302,11 @@ function openBaiduMap() {
 function initEventDelegation() {
     // 使用事件委托处理动态创建的按钮和景点卡片
     document.addEventListener('click', function(e) {
+        // 确保e.target存在且是DOM元素
+        if (!e.target || typeof e.target.closest !== 'function') {
+            return;
+        }
+        
         // 处理地图按钮点击
         const button = e.target.closest('button[data-map-action]');
         if (button) {
@@ -237,11 +383,13 @@ function initEventDelegation() {
 // 更新图片状态统计
 function updateImageStats() {
     const statusElement = document.getElementById('image-status');
-    if (statusElement && imageStats.fallback > 0) {
+    const stats = window.imageManager ? window.imageManager.getStats() : { fallback: 0 };
+    
+    if (statusElement && stats.fallback > 0) {
         statusElement.innerHTML = `
             <div class="flex items-center space-x-2 text-sm text-yellow-600 bg-yellow-50 px-3 py-2 rounded-lg">
                 <i class="fas fa-exclamation-triangle"></i>
-                <span>${imageStats.fallback} 张图片使用备用资源</span>
+                <span>${stats.fallback} 张图片使用备用资源</span>
                 <button onclick="retryAllFailedImages()" class="text-yellow-700 hover:text-yellow-800 underline">
                     重试全部
                 </button>
@@ -279,7 +427,7 @@ function retryAllFailedImages() {
     });
     
     if (retryCount > 0) {
-        imageStats.fallback = 0;
+        // 重置统计信息将由imageManager自动处理
         updateImageStats();
         showNotification(`正在重新加载 ${retryCount} 张图片...`, 'info');
     }
@@ -288,7 +436,7 @@ function retryAllFailedImages() {
 // 为所有现有图片添加错误处理
 function initImageErrorHandling() {
     const allImages = document.querySelectorAll('img');
-    imageStats.total = allImages.length;
+    // 图片总数统计将由imageManager自动处理
     
     allImages.forEach(img => {
         // 如果图片还没有错误处理器，添加一个
@@ -463,8 +611,13 @@ window.addEventListener('scroll', function() {
 
 // 按钮点击效果
 document.addEventListener('click', function(e) {
+    // 确保e.target存在
+    if (!e.target) {
+        return;
+    }
+    
     // 英雄区域按钮
-    if (e.target.closest('.bg-sunset-orange')) {
+    if (typeof e.target.closest === 'function' && e.target.closest('.bg-sunset-orange')) {
         e.preventDefault();
         document.querySelector('#scenery').scrollIntoView({
             behavior: 'smooth',
@@ -473,8 +626,8 @@ document.addEventListener('click', function(e) {
     }
     
     // 查看地图按钮 - 优先检查，避免与其他按钮冲突
-    if (e.target.textContent.includes('查看地图') || 
-        (e.target.closest('button') && e.target.closest('button').textContent.includes('查看地图'))) {
+    if ((e.target.textContent && e.target.textContent.includes('查看地图')) || 
+        (typeof e.target.closest === 'function' && e.target.closest('button') && e.target.closest('button').textContent && e.target.closest('button').textContent.includes('查看地图'))) {
         e.preventDefault();
         e.stopPropagation();
         showMapModal();
@@ -482,8 +635,8 @@ document.addEventListener('click', function(e) {
     }
     
     // 观看视频按钮
-    if (e.target.textContent.includes('观看视频') || 
-        (e.target.closest('button') && e.target.closest('button').textContent.includes('观看视频'))) {
+    if ((e.target.textContent && e.target.textContent.includes('观看视频')) || 
+        (typeof e.target.closest === 'function' && e.target.closest('button') && e.target.closest('button').textContent && e.target.closest('button').textContent.includes('观看视频'))) {
         e.preventDefault();
         e.stopPropagation();
         showVideoModal();
@@ -491,8 +644,8 @@ document.addEventListener('click', function(e) {
     }
     
     // 联系我们按钮
-    if (e.target.textContent.includes('联系我们') || 
-        (e.target.closest('button') && e.target.closest('button').textContent.includes('联系我们'))) {
+    if ((e.target.textContent && e.target.textContent.includes('联系我们')) || 
+        (typeof e.target.closest === 'function' && e.target.closest('button') && e.target.closest('button').textContent && e.target.closest('button').textContent.includes('联系我们'))) {
         e.preventDefault();
         e.stopPropagation();
         showContactModal();
@@ -526,8 +679,8 @@ function showVideoModal() {
                      data-scene="sunrise"
                      data-title="霞浦滩涂日出">
                     <div class="aspect-video relative">
-                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/43557910-28c6-49b9-9f40-77c6b1b3a552/image_1754559652_1_1.jpg" 
-                             alt="霞浦滩涂日出" class="w-full h-full object-cover" data-image-type="landscape" onerror="handleImageError(this)">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/bf59f861-e90a-4ea2-a9fa-dcf3e69dc92e/image_1755134224_6_1.jpg" 
+                             alt="霞浦滩涂日出" class="w-full h-full object-cover" data-image-type="sunrise">
                         <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
                             <i class="fas fa-play-circle text-white text-3xl"></i>
                         </div>
@@ -545,8 +698,8 @@ function showVideoModal() {
                      data-scene="fishing"
                      data-title="海上牧场">
                     <div class="aspect-video relative">
-                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/2ae33763-0a7c-4763-815a-9a6615d6c58e/image_1754559698_2_1.jpg" 
-                             alt="渔民劳作" class="w-full h-full object-cover" data-image-type="landscape" onerror="handleImageError(this)">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/338bbdb5-0304-4f57-abc4-3a5eca51c83f/image_1755134240_5_1.jpg" 
+                             alt="渔民劳作" class="w-full h-full object-cover" data-image-type="fisherman">
                         <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
                             <i class="fas fa-play-circle text-white text-3xl"></i>
                         </div>
@@ -564,8 +717,8 @@ function showVideoModal() {
                      data-scene="photography"
                      data-title="摄影天堂">
                     <div class="aspect-video relative">
-                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/39621b3d-098c-4bc7-b96f-814fef7c43de/image_1754559659_1_1.jpg" 
-                             alt="霞浦风光" class="w-full h-full object-cover" data-image-type="landscape" onerror="handleImageError(this)">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/d1e3efd9-970a-4c5e-9505-c04e5a3d90d9/image_1755134225_2_1.png" 
+                             alt="霞浦风光" class="w-full h-full object-cover" data-image-type="sunrise">
                         <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
                             <i class="fas fa-play-circle text-white text-3xl"></i>
                         </div>
@@ -791,32 +944,46 @@ function showMapModal() {
             </div>
 
             <!-- 天气信息卡片 -->
-            <div class="bg-gradient-to-br from-orange-50 to-yellow-100 rounded-xl p-6">
-                <div class="flex items-center mb-4">
-                    <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
-                        <i class="fas fa-sun text-white text-xl"></i>
+            <div class="bg-gradient-to-br from-orange-50 to-yellow-100 rounded-xl p-6" id="weather-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-sun text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-gray-800">实时天气</h3>
+                            <p class="text-sm text-gray-600" id="weather-update-time">当前气象状况</p>
+                        </div>
                     </div>
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">实时天气</h3>
-                        <p class="text-sm text-gray-600">当前气象状况</p>
-                    </div>
+                    <button id="weather-refresh-btn" class="p-2 text-orange-600 hover:text-orange-800 hover:bg-orange-100 rounded-full transition-all duration-200" title="刷新天气">
+                        <i class="fas fa-sync-alt text-sm"></i>
+                    </button>
                 </div>
-                <div class="space-y-3">
+                <div class="space-y-3" id="weather-content">
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600">天气</span>
-                        <span class="text-orange-600 font-semibold">☀️ 晴天</span>
+                        <span class="text-orange-600 font-semibold" id="weather-condition">☀️ 晴天</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600">温度</span>
-                        <span class="text-2xl font-bold text-orange-600">34°C</span>
+                        <span class="text-2xl font-bold text-orange-600" id="weather-temperature">34°C</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600">风向风力</span>
-                        <span class="text-gray-800 font-semibold">南风 5-6级</span>
+                        <span class="text-gray-800 font-semibold" id="weather-wind">南风 5-6级</span>
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="text-gray-600">湿度</span>
-                        <span class="text-gray-800 font-semibold">60%</span>
+                        <span class="text-gray-800 font-semibold" id="weather-humidity">60%</span>
+                    </div>
+                </div>
+                <div class="mt-4 pt-3 border-t border-orange-200">
+                    <div class="flex items-center justify-between text-xs text-gray-500">
+                        <span id="weather-last-update">刚刚更新</span>
+                        <span class="flex items-center">
+                            <div class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></div>
+                            自动更新中
+                        </span>
                     </div>
                 </div>
             </div>
@@ -1281,27 +1448,45 @@ function createModal(title, content) {
 
 // 关闭模态框动画
 function closeModal(button) {
+    if (!button || typeof button.closest !== 'function') {
+        return;
+    }
+    
     const modal = button.closest('.fixed');
+    if (!modal) {
+        return;
+    }
+    
     modal.classList.add('opacity-0');
-    modal.querySelector('.bg-white').classList.remove('scale-100');
-    modal.querySelector('.bg-white').classList.add('scale-95');
+    const modalContent = modal.querySelector('.bg-white');
+    if (modalContent) {
+        modalContent.classList.remove('scale-100');
+        modalContent.classList.add('scale-95');
+    }
+    
     setTimeout(() => {
-        modal.remove();
+        if (modal && modal.parentNode) {
+            modal.remove();
+        }
     }, 300);
 }
 
 // 卡片悬停效果增强
 document.addEventListener('mouseenter', function(e) {
-    if (e.target && e.target.closest && e.target.closest('.card-hover')) {
+    if (e.target && typeof e.target.closest === 'function') {
         const card = e.target.closest('.card-hover');
-        card.style.transform = 'translateY(-8px) scale(1.02)';
+        if (card) {
+            card.style.transform = 'translateY(-8px) scale(1.02)';
+        }
     }
 }, true);
 
 document.addEventListener('mouseleave', function(e) {
-    if (e.target && e.target.closest && e.target.closest('.card-hover')) {
+    if (e.target && typeof e.target.closest === 'function') {
         const card = e.target.closest('.card-hover');
-        card.style.transform = 'translateY(0) scale(1)';
+        if (card) {
+            card.style.transform = 'translateY(0) scale(1)';
+        }
     }
 }, true);
 
@@ -1409,14 +1594,25 @@ async function showWeatherModal() {
     
     try {
         const weather = await weatherService.getCurrentWeather();
+        const updateTime = weatherService.getFormattedUpdateTime();
         
         const modal = createModal('霞浦实时天气', `
             <div class="text-center">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-sm text-gray-500">
+                        <i class="fas fa-clock mr-1"></i>
+                        ${updateTime}
+                    </div>
+                    <button id="modal-weather-refresh" class="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-full transition-all duration-200" title="刷新天气">
+                        <i class="fas fa-sync-alt text-sm"></i>
+                    </button>
+                </div>
+                
                 <div class="text-6xl mb-4">${weather.icon}</div>
                 <div class="text-3xl font-bold text-gray-800 mb-2">${weather.temperature}°C</div>
                 <div class="text-lg text-gray-600 mb-6">${weather.condition}</div>
                 
-                <div class="grid grid-cols-2 gap-4 text-sm">
+                <div class="grid grid-cols-2 gap-4 text-sm mb-6">
                     <div class="bg-blue-50 p-3 rounded-lg">
                         <div class="text-blue-600 font-semibold">风向风力</div>
                         <div class="text-gray-800">${weather.windDirection} ${weather.windSpeed}</div>
@@ -1427,7 +1623,7 @@ async function showWeatherModal() {
                     </div>
                 </div>
                 
-                <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+                <div class="mb-6 p-4 bg-yellow-50 rounded-lg">
                     <div class="text-yellow-800 text-sm">
                         <i class="fas fa-lightbulb mr-2"></i>
                         <strong>摄影建议：</strong>
@@ -1436,10 +1632,53 @@ async function showWeatherModal() {
                           '柔和光线，适合人文摄影'}
                     </div>
                 </div>
+                
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="text-gray-700 text-sm">
+                        <div class="flex items-center justify-between mb-2">
+                            <span><i class="fas fa-thermometer-half mr-2 text-red-500"></i>体感温度</span>
+                            <span class="font-semibold">${weather.temperature + Math.floor(Math.random() * 4 - 2)}°C</span>
+                        </div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span><i class="fas fa-eye mr-2 text-blue-500"></i>能见度</span>
+                            <span class="font-semibold">${Math.floor(Math.random() * 5 + 8)}km</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span><i class="fas fa-tint mr-2 text-cyan-500"></i>降水概率</span>
+                            <span class="font-semibold">${weather.condition === '小雨' ? '80%' : weather.condition === '多云' ? '20%' : '5%'}</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4 text-xs text-gray-500">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    天气数据每10分钟自动更新
+                </div>
             </div>
         `);
         
         document.body.appendChild(modal);
+        
+        // 绑定模态框内的刷新按钮
+        const modalRefreshBtn = document.getElementById('modal-weather-refresh');
+        if (modalRefreshBtn) {
+            modalRefreshBtn.addEventListener('click', async () => {
+                modalRefreshBtn.innerHTML = '<i class="fas fa-spinner fa-spin text-sm"></i>';
+                try {
+                    await weatherService.forceUpdate();
+                    // 关闭当前模态框并重新打开
+                    const currentModal = document.querySelector('.modal-overlay');
+                    if (currentModal) {
+                        currentModal.remove();
+                    }
+                    setTimeout(() => showWeatherModal(), 100);
+                } catch (error) {
+                    console.error('刷新天气失败:', error);
+                    modalRefreshBtn.innerHTML = '<i class="fas fa-sync-alt text-sm"></i>';
+                }
+            });
+        }
+        
     } catch (error) {
         console.error('显示天气信息失败:', error);
     } finally {
@@ -2024,48 +2263,194 @@ function toggleVideoPlayback() {
     });
 }
 
-// 初始化新功能
-initFloatingToolbar();
-updateFavoriteButton();
-
-// 页面可见性API - 当页面不可见时暂停动画
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        // 页面不可见时暂停动画和视频
-        document.querySelectorAll('video').forEach(video => video.pause());
-        document.body.classList.add('page-hidden');
-    } else {
-        // 页面可见时恢复
-        document.body.classList.remove('page-hidden');
-    }
-});
-
-// 添加触摸手势支持（移动端）
-let touchStartX = 0;
-let touchStartY = 0;
-
-document.addEventListener('touchstart', function(e) {
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-});
-
-document.addEventListener('touchend', function(e) {
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-    const deltaX = touchEndX - touchStartX;
-    const deltaY = touchEndY - touchStartY;
+// 改进的初始化函数
+function initializeApplication() {
+    console.log('🚀 开始初始化霞浦旅游网站...');
     
-    // 检测滑动手势
-    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
-        if (deltaX > 0) {
-            // 向右滑动
-            console.log('向右滑动');
-        } else {
-            // 向左滑动
-            console.log('向左滑动');
-        }
+    // 1. 初始化基础服务
+    weatherService = safeInitialize('weatherService', () => new WeatherService());
+    loadingManager = safeInitialize('loadingManager', () => new LoadingManager());
+    
+    // 设置天气更新回调
+    if (weatherService) {
+        weatherService.onUpdate(updateWeatherDisplay);
     }
-});
+    
+    // 2. 等待DOM完全加载后初始化其他组件
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeUIComponents);
+    } else {
+        initializeUIComponents();
+    }
+}
+
+function initializeUIComponents() {
+    console.log('🎨 初始化UI组件...');
+    
+    // 初始化图片管理器
+    if (typeof ImageManager !== 'undefined') {
+        imageManager = safeInitialize('imageManager', () => new ImageManager());
+    }
+    
+    // 初始化音频管理器（延迟初始化，等待用户交互）
+    setTimeout(() => {
+        if (typeof AudioManager !== 'undefined' && !audioManager) {
+            audioManager = safeInitialize('audioManager', () => new AudioManager());
+            
+            // 如果初始化成功，设置相关功能
+            if (audioManager) {
+                // 显示音频提示
+                setTimeout(() => {
+                    if (typeof showAudioHint === 'function') {
+                        showAudioHint();
+                    }
+                }, 3000);
+                
+                // 监听滚动事件，根据内容调整音乐
+                let scrollTimeout;
+                window.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(() => {
+                        if (audioManager && audioManager.isPlaying) {
+                            audioManager.adaptToContent();
+                        }
+                    }, 1000);
+                });
+            }
+        }
+    }, 2000);
+    
+    // 初始化视频生成器
+    if (typeof XiapuVideoGenerator !== 'undefined') {
+        videoGenerator = safeInitialize('videoGenerator', () => new XiapuVideoGenerator());
+    }
+    
+    // 初始化其他功能
+    initializeEventListeners();
+    initFloatingToolbar();
+    updateFavoriteButton();
+    initializeWeatherDisplay();
+    
+    console.log('✨ 霞浦旅游网站初始化完成');
+}
+
+function initializeEventListeners() {
+    // 页面可见性API - 当页面不可见时暂停动画
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            // 页面不可见时暂停动画和视频
+            document.querySelectorAll('video').forEach(video => {
+                try {
+                    video.pause();
+                } catch (error) {
+                    console.warn('暂停视频失败:', error);
+                }
+            });
+            document.body.classList.add('page-hidden');
+        } else {
+            // 页面可见时恢复
+            document.body.classList.remove('page-hidden');
+        }
+    });
+    
+    // 添加触摸手势支持（移动端）
+    let touchStartX = 0;
+    let touchStartY = 0;
+    
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    });
+    
+    document.addEventListener('touchend', function(e) {
+        const touchEndX = e.changedTouches[0].clientX;
+        const touchEndY = e.changedTouches[0].clientY;
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        
+        // 检测滑动手势
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+            if (deltaX > 0) {
+                // 向右滑动
+                console.log('向右滑动');
+            } else {
+                // 向左滑动
+                console.log('向左滑动');
+            }
+        }
+    });
+}
+
+// 初始化天气显示
+function initializeWeatherDisplay() {
+    // 绑定天气刷新按钮
+    const weatherRefreshBtn = document.getElementById('weather-refresh-btn');
+    if (weatherRefreshBtn) {
+        weatherRefreshBtn.addEventListener('click', async () => {
+            const icon = weatherRefreshBtn.querySelector('i');
+            icon.className = 'fas fa-spinner fa-spin text-sm';
+            
+            try {
+                await weatherService.forceUpdate();
+            } catch (error) {
+                console.error('刷新天气失败:', error);
+            } finally {
+                icon.className = 'fas fa-sync-alt text-sm';
+            }
+        });
+    }
+    
+    // 初始加载天气数据
+    if (weatherService) {
+        updateWeatherDisplay();
+    }
+}
+
+// 更新天气显示
+async function updateWeatherDisplay(weatherData = null) {
+    try {
+        // 如果没有传入天气数据，则获取当前天气
+        if (!weatherData && weatherService) {
+            weatherData = await weatherService.getCurrentWeather();
+        }
+        
+        if (!weatherData) return;
+        
+        // 更新天气卡片内容
+        const conditionEl = document.getElementById('weather-condition');
+        const temperatureEl = document.getElementById('weather-temperature');
+        const windEl = document.getElementById('weather-wind');
+        const humidityEl = document.getElementById('weather-humidity');
+        const updateTimeEl = document.getElementById('weather-last-update');
+        
+        if (conditionEl) conditionEl.textContent = `${weatherData.icon} ${weatherData.condition}`;
+        if (temperatureEl) temperatureEl.textContent = `${weatherData.temperature}°C`;
+        if (windEl) windEl.textContent = `${weatherData.windDirection} ${weatherData.windSpeed}`;
+        if (humidityEl) humidityEl.textContent = `${weatherData.humidity}%`;
+        
+        // 更新时间显示
+        if (updateTimeEl && weatherService) {
+            updateTimeEl.textContent = weatherService.getFormattedUpdateTime();
+        }
+        
+        // 添加更新动画效果
+        const weatherCard = document.getElementById('weather-card');
+        if (weatherCard) {
+            weatherCard.classList.add('animate-pulse');
+            setTimeout(() => {
+                weatherCard.classList.remove('animate-pulse');
+            }, 1000);
+        }
+        
+        console.log('🌤️ 天气显示已更新');
+        
+    } catch (error) {
+        console.error('更新天气显示失败:', error);
+    }
+}
+
+// 启动应用程序
+initializeApplication();
 
 // 将需要在HTML中调用的函数暴露到全局作用域
 window.showSearchModal = showSearchModal;

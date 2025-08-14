@@ -14,18 +14,47 @@ class ImageManager {
         
         this.onlineImages = {
             sunrise: [
+                // 新搜索的霞浦日出图片
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/bf59f861-e90a-4ea2-a9fa-dcf3e69dc92e/image_1755134224_6_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/e06b0934-933b-422b-b7f2-9ea347ef23c0/image_1755134224_3_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/d1e3efd9-970a-4c5e-9505-c04e5a3d90d9/image_1755134225_2_1.png',
+                // 原有图片作为备用
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/d9e716ba-389a-4395-ade8-a13fdcf9d03f/image_1754616767_3_1.jpg',
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/dc84ed5b-46f4-496f-a940-697c5f3f0b1c/image_1754616767_4_1.jpg',
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/354ae1b3-d38d-4ef8-a59b-dcd4bf01761a/image_1754616767_5_1.jpg'
             ],
             seafood: [
+                // 新搜索的霞浦海鲜图片
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/be5cd14b-b32d-4feb-9a90-f4b7689b2c37/image_1755134233_2_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/b59c6d54-3f54-4b1e-8e60-ed678100b416/image_1755134233_4_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/2f9f807d-50b5-4f7a-af75-acfba5b287b4/image_1755134233_3_1.jpg',
+                // 原有图片作为备用
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/cf41abea-0a8e-4cee-995c-3f6173754c1b/image_1754616775_6_1.png',
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/629fb330-4d01-4e1b-9f46-6d64fd1ba204/image_1754616775_2_1.jpg',
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/e7b6949b-a321-4f04-9d02-49c8f03d8170/image_1754616775_1_1.png'
             ],
             fisherman: [
+                // 新搜索的渔民劳作图片
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/5b29f661-74f3-485a-a963-d31da816e0ef/image_1755134239_6_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/feffba5e-1805-45bb-a5b2-0bf73b9c9cdf/image_1755134239_3_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/338bbdb5-0304-4f57-abc4-3a5eca51c83f/image_1755134240_5_1.jpg',
+                // 原有图片作为备用
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/1530caa9-c3ae-4347-915d-c36c892a49fa/image_1754616784_1_1.png',
                 'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/9c9d1680-4b7e-4390-adf2-8cc896e4f440/image_1754616784_4_1.png'
+            ],
+            aquaculture: [
+                // 新搜索的紫菜养殖图片
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/cc9cc7e8-35e9-41a5-b2b3-22fc7d3ff8b5/image_1755134245_1_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/00cee557-a873-48fe-93f4-9255b39c6ef8/image_1755134245_6_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/304c95f5-50d2-4a2b-87fd-a7327487779b/image_1755134245_3_1.jpg',
+                // 原有紫菜养殖相关图片
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/fd9c67d8-3d2a-48ae-bf5e-02308f03a5f3/image_1755049856_4_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/3508c8d9-fa4b-4183-b40c-a4542a2bd60d/image_1755049856_3_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/ed998e6a-de85-45f4-8303-29853cf35f1f/image_1755049856_6_1.jpg',
+                // 海带养殖相关图片
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/105609d2-fc30-4734-aeb8-0f5ee5cdaf96/image_1755049863_6_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/447d24a9-89e0-4b02-ac27-894063768d8b/image_1755049863_4_1.jpg',
+                'https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/20c2f65c-3d56-4367-ad94-0ceb8de28c61/image_1755049863_5_1.png'
             ]
         };
         
@@ -39,14 +68,44 @@ class ImageManager {
         
         this.retryAttempts = new Map();
         this.maxRetries = 2;
+        this.imageObserver = null;
+        this.isInitialized = false;
+        
         this.init();
     }
     
     init() {
-        this.setupImageObserver();
-        this.createStatusIndicator();
-        this.bindEvents();
-        console.log('🖼️ 图片管理系统已初始化');
+        try {
+            this.setupImageObserver();
+            this.createStatusIndicator();
+            this.bindEvents();
+            this.preloadCriticalImages();
+            this.isInitialized = true;
+            console.log('✅ 图片管理系统已初始化');
+        } catch (error) {
+            console.error('❌ 图片管理系统初始化失败:', error);
+        }
+    }
+    
+    // 预加载关键图片
+    preloadCriticalImages() {
+        const criticalImages = [
+            // 预加载每个类别的第一张图片
+            this.onlineImages.sunrise[0],
+            this.onlineImages.seafood[0],
+            this.onlineImages.fisherman[0],
+            this.onlineImages.aquaculture[0]
+        ];
+        
+        criticalImages.forEach(src => {
+            if (src) {
+                const img = new Image();
+                img.crossOrigin = 'anonymous';
+                img.onload = () => console.log('✅ 预加载成功:', src);
+                img.onerror = () => console.warn('⚠️ 预加载失败:', src);
+                img.src = src;
+            }
+        });
     }
     
     // 设置图片观察器
@@ -63,9 +122,11 @@ class ImageManager {
                 rootMargin: '50px'
             });
             
-            this.observeImages();
+            // 延迟观察图片，确保DOM已完全加载
+            setTimeout(() => this.observeImages(), 100);
         } else {
-            this.loadAllImages();
+            // 降级处理：直接加载所有图片
+            setTimeout(() => this.loadAllImages(), 100);
         }
     }
     
@@ -106,19 +167,37 @@ class ImageManager {
     async tryOnlineImage(img, src) {
         return new Promise((resolve) => {
             const testImg = new Image();
+            let resolved = false;
+            
             testImg.onload = () => {
-                img.src = src;
-                resolve(true);
+                if (!resolved) {
+                    resolved = true;
+                    img.src = src;
+                    img.classList.add('image-loaded');
+                    resolve(true);
+                }
             };
+            
             testImg.onerror = () => {
-                resolve(false);
+                if (!resolved) {
+                    resolved = true;
+                    console.warn('图片加载失败:', src);
+                    resolve(false);
+                }
             };
+            
+            // 设置crossOrigin以避免CORS问题
+            testImg.crossOrigin = 'anonymous';
             testImg.src = src;
             
-            // 设置超时
+            // 设置超时（减少到3秒以提高响应速度）
             setTimeout(() => {
-                resolve(false);
-            }, 5000);
+                if (!resolved) {
+                    resolved = true;
+                    console.warn('图片加载超时:', src);
+                    resolve(false);
+                }
+            }, 3000);
         });
     }
     
@@ -134,6 +213,10 @@ class ImageManager {
             return this.getRandomOnlineImage('seafood');
         } else if (altText.includes('渔民') || altText.includes('劳作') || altText.includes('fisherman')) {
             return this.getRandomOnlineImage('fisherman');
+        } else if (altText.includes('紫菜') || altText.includes('海带') || altText.includes('渔船') || 
+                   altText.includes('养殖') || altText.includes('牧场') || altText.includes('海上')) {
+            // 海上牧场相关图片，使用专门的水产养殖类别
+            return this.getRandomOnlineImage('aquaculture');
         }
         
         return this.getRandomOnlineImage('sunrise'); // 默认
@@ -423,6 +506,70 @@ class ImageManager {
             childList: true,
             subtree: true
         });
+        
+        // 监听窗口焦点事件，重新检查图片
+        window.addEventListener('focus', () => {
+            setTimeout(() => this.retryFailedImages(), 500);
+        });
+        
+        // 监听网络状态变化
+        if ('navigator' in window && 'onLine' in navigator) {
+            window.addEventListener('online', () => {
+                console.log('🌐 网络已连接，重新加载失败的图片');
+                this.retryFailedImages();
+            });
+        }
+        
+        // 定期健康检查（每30秒检查一次）
+        setInterval(() => {
+            this.performHealthCheck();
+        }, 30000);
+        
+        // 页面加载完成后检查图片
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => this.checkAllImages(), 1000);
+            });
+        } else {
+            setTimeout(() => this.checkAllImages(), 1000);
+        }
+    }
+    
+    // 执行图片健康检查
+    performHealthCheck() {
+        const brokenImages = document.querySelectorAll('img[src=""], img:not([src]), .fallback-image');
+        if (brokenImages.length > 0) {
+            console.log(`🔍 发现 ${brokenImages.length} 张需要修复的图片`);
+            brokenImages.forEach(img => {
+                if (!img.classList.contains('image-loaded')) {
+                    this.loadImage(img);
+                }
+            });
+        }
+    }
+    
+    // 重试失败的图片
+    retryFailedImages() {
+        const failedImages = document.querySelectorAll('.fallback-image');
+        if (failedImages.length === 0) return;
+        
+        console.log(`🔄 重试 ${failedImages.length} 张失败的图片`);
+        failedImages.forEach(img => {
+            const originalSrc = img.getAttribute('data-original-src');
+            if (originalSrc) {
+                this.retryImage(img);
+            }
+        });
+    }
+    
+    // 检查所有图片
+    checkAllImages() {
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            if (!img.src || img.src === '' || img.classList.contains('fallback-image')) {
+                this.loadImage(img);
+            }
+        });
     }
     
     // 搜索在线图片
@@ -473,6 +620,19 @@ class ImageManager {
 
 // 导出图片管理器
 window.ImageManager = ImageManager;
+
+// 全局图片错误处理函数，供HTML中的onerror属性调用
+window.handleImageError = function(img) {
+    if (window.imageManager) {
+        window.imageManager.handleImageError(img);
+    } else {
+        // 如果imageManager还未初始化，使用简单的备用处理
+        console.warn('ImageManager未初始化，使用简单备用处理');
+        img.src = '/images/fallback-landscape.svg';
+        img.style.filter = 'grayscale(50%)';
+        img.title = '图片加载失败，点击重试';
+    }
+};
 
 // 自动初始化
 document.addEventListener('DOMContentLoaded', () => {

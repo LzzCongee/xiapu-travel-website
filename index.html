@@ -40,16 +40,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- 二维码生成库 -->
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-    <!-- 图片管理系统 -->
-    <script src="/image-manager.js"></script>
-    <!-- 图片搜索演示 -->
-    <script src="/image-search-demo.js"></script>
-    <!-- 移动端调试工具 -->
+    
+    <!-- 按依赖顺序加载脚本 -->
+    <!-- 1. 基础工具和调试 -->
     <script src="/mobile-debug.js"></script>
-    <!-- 海洋音效生成器 -->
+    <script src="/error-recovery.js"></script>
+    <script src="/system-health.js"></script>
+    <script src="/performance-monitor.js"></script>
+    
+    <!-- 2. 音频相关（海洋音效生成器必须在音频管理器之前） -->
     <script src="/ocean-audio.js"></script>
-    <!-- 音频管理器 -->
     <script src="/audio-manager.js"></script>
+    
+    <!-- 3. 图片管理系统 -->
+    <script src="/image-manager.js"></script>
+    <script src="/image-status-checker.js"></script>
+    
+    <!-- 4. 其他功能模块 -->
+    <script src="/image-search-demo.js"></script>
+    
     <script>
         tailwind.config = {
             theme: {
@@ -62,6 +71,17 @@
                 }
             }
         }
+        
+        // 全局错误处理
+        window.addEventListener('error', function(event) {
+            console.error('全局错误:', event.error);
+            // 可以在这里添加错误上报逻辑
+        });
+        
+        window.addEventListener('unhandledrejection', function(event) {
+            console.error('未处理的Promise拒绝:', event.reason);
+            // 可以在这里添加错误上报逻辑
+        });
     </script>
     <style>
         /* 性能优化：使用GPU加速 */
@@ -77,6 +97,28 @@
         .card-hover:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        /* 图片加载状态样式 */
+        img[data-src] {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        img.image-loaded {
+            animation: none;
+            background: none;
+        }
+        
+        img.fallback-image {
+            filter: grayscale(20%) opacity(0.8);
+            border: 2px dashed #fbbf24;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
         
         .parallax {
@@ -650,8 +692,8 @@
                 <!-- 滩涂日出 -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
                     <div class="relative h-64">
-                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/43557910-28c6-49b9-9f40-77c6b1b3a552/image_1754559652_1_1.jpg" 
-                             alt="霞浦滩涂日出" class="w-full h-full object-cover" data-image-type="landscape">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/bf59f861-e90a-4ea2-a9fa-dcf3e69dc92e/image_1755134224_6_1.jpg" 
+                             alt="霞浦滩涂日出" class="w-full h-full object-cover" data-image-type="sunrise">
                         <div class="absolute top-4 left-4 bg-sunset-orange text-white px-3 py-1 rounded-full text-sm font-semibold">
                             <i class="fas fa-sun mr-1"></i>日出美景
                         </div>
@@ -669,8 +711,8 @@
                 <!-- 滩涂风光 -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
                     <div class="relative h-64">
-                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/39621b3d-098c-4bc7-b96f-814fef7c43de/image_1754559659_1_1.jpg" 
-                             alt="霞浦滩涂风光" class="w-full h-full object-cover" data-image-type="landscape">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/e06b0934-933b-422b-b7f2-9ea347ef23c0/image_1755134224_3_1.jpg" 
+                             alt="霞浦滩涂风光" class="w-full h-full object-cover" data-image-type="sunrise">
                         <div class="absolute top-4 left-4 bg-golden text-white px-3 py-1 rounded-full text-sm font-semibold">
                             <i class="fas fa-water mr-1"></i>滩涂奇观
                         </div>
@@ -688,8 +730,8 @@
                 <!-- 海岸风景 -->
                 <div class="card-hover bg-white rounded-2xl shadow-lg overflow-hidden fade-in">
                     <div class="relative h-64">
-                        <img src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/d89167c4-bae6-450a-bf81-df722f4c153a/image_1754559667_1_1.jpg" 
-                             alt="霞浦海岸风景" class="w-full h-full object-cover" data-image-type="landscape">
+                        <img data-src="https://zhiyan-ai-agent-with-1258344702.cos.ap-guangzhou.tencentcos.cn/with/feffba5e-1805-45bb-a5b2-0bf73b9c9cdf/image_1755134239_3_1.jpg" 
+                             alt="霞浦海岸风景" class="w-full h-full object-cover" data-image-type="fisherman">
                         <div class="absolute top-4 left-4 bg-ocean-blue text-white px-3 py-1 rounded-full text-sm font-semibold">
                             <i class="fas fa-mountain mr-1"></i>海岸线
                         </div>

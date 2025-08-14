@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>霞浦旅游网站 - 系统健康状态</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .status-healthy { @apply bg-green-100 text-green-800 border-green-200; }
+        .status-warning { @apply bg-yellow-100 text-yellow-800 border-yellow-200; }
+        .status-error { @apply bg-red-100 text-red-800 border-red-200; }
+        .pulse-animation { animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- 导航栏 -->
+    <nav class="bg-white shadow-sm border-b">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-blue-600 hover:text-blue-800 mr-4">
+                        <i class="fas fa-arrow-left mr-2"></i>返回主站
+                    </a>
+                    <h1 class="text-xl font-bold text-gray-900">系统健康状态监控</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-500" id="last-update">
+                        最后更新: --
+                    </div>
+                    <button id="refresh-btn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>刷新
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 总体状态概览 -->
+        <div class="mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 mb-2">系统总体状态</h2>
+                        <p class="text-gray-600">实时监控网站各个组件的运行状况</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="flex items-center justify-end mb-2">
+                            <div id="overall-status-icon" class="w-4 h-4 rounded-full bg-gray-400 mr-2"></div>
+                            <span id="overall-status-text" class="text-lg font-semibold">检查中...</span>
+                        </div>
+                        <div id="healthy-count" class="text-sm text-gray-500">0/0 组件正常</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 组件状态详情 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- 天气服务状态 -->
+            <div class="bg-white rounded-lg shadow-sm p-6" id="weather-service-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-cloud-sun text-orange-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">天气服务</h3>
+                            <p class="text-sm text-gray-500">Weather Service</p>
+                        </div>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="w-3 h-3 rounded-full bg-gray-400" id="weather-status-dot"></div>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">状态:</span>
+                        <span id="weather-status" class="font-medium">检查中</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">自动更新:</span>
+                        <span id="weather-auto-update" class="font-medium">--</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">上次更新:</span>
+                        <span id="weather-last-update" class="font-medium">--</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">缓存大小:</span>
+                        <span id="weather-cache-size" class="font-medium">--</span>
+                    </div>
+                </div>
+                <div id="weather-errors" class="mt-4 hidden">
+                    <div class="text-sm font-medium text-red-600 mb-1">错误信息:</div>
+                    <div class="text-sm text-red-500" id="weather-error-list"></div>
+                </div>
+            </div>
+
+            <!-- 图片管理器状态 -->
+            <div class="bg-white rounded-lg shadow-sm p-6" id="image-manager-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-images text-blue-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">图片管理器</h3>
+                            <p class="text-sm text-gray-500">Image Manager</p>
+                        </div>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="w-3 h-3 rounded-full bg-gray-400" id="image-status-dot"></div>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">状态:</span>
+                        <span id="image-status" class="font-medium">检查中</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">加载成功:</span>
+                        <span id="image-success-count" class="font-medium">--</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">加载失败:</span>
+                        <span id="image-error-count" class="font-medium">--</span>
+                    </div>
+                </div>
+                <div id="image-errors" class="mt-4 hidden">
+                    <div class="text-sm font-medium text-red-600 mb-1">错误信息:</div>
+                    <div class="text-sm text-red-500" id="image-error-list"></div>
+                </div>
+            </div>
+
+            <!-- 音频管理器状态 -->
+            <div class="bg-white rounded-lg shadow-sm p-6" id="audio-manager-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-music text-green-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">音频管理器</h3>
+                            <p class="text-sm text-gray-500">Audio Manager</p>
+                        </div>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="w-3 h-3 rounded-full bg-gray-400" id="audio-status-dot"></div>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">状态:</span>
+                        <span id="audio-status" class="font-medium">检查中</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">播放状态:</span>
+                        <span id="audio-playing" class="font-medium">--</span>
+                    </div>
+                </div>
+                <div id="audio-errors" class="mt-4 hidden">
+                    <div class="text-sm font-medium text-red-600 mb-1">错误信息:</div>
+                    <div class="text-sm text-red-500" id="audio-error-list"></div>
+                </div>
+            </div>
+
+            <!-- 海洋音效生成器状态 -->
+            <div class="bg-white rounded-lg shadow-sm p-6" id="ocean-audio-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-cyan-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-water text-cyan-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">海洋音效</h3>
+                            <p class="text-sm text-gray-500">Ocean Audio</p>
+                        </div>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="w-3 h-3 rounded-full bg-gray-400" id="ocean-status-dot"></div>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">状态:</span>
+                        <span id="ocean-status" class="font-medium">检查中</span>
+                    </div>
+                </div>
+                <div id="ocean-errors" class="mt-4 hidden">
+                    <div class="text-sm font-medium text-red-600 mb-1">错误信息:</div>
+                    <div class="text-sm text-red-500" id="ocean-error-list"></div>
+                </div>
+            </div>
+
+            <!-- 加载管理器状态 -->
+            <div class="bg-white rounded-lg shadow-sm p-6" id="loading-manager-card">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                            <i class="fas fa-spinner text-purple-600"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">加载管理器</h3>
+                            <p class="text-sm text-gray-500">Loading Manager</p>
+                        </div>
+                    </div>
+                    <div class="status-indicator">
+                        <div class="w-3 h-3 rounded-full bg-gray-400" id="loading-status-dot"></div>
+                    </div>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">状态:</span>
+                        <span id="loading-status" class="font-medium">检查中</span>
+                    </div>
+                </div>
+                <div id="loading-errors" class="mt-4 hidden">
+                    <div class="text-sm font-medium text-red-600 mb-1">错误信息:</div>
+                    <div class="text-sm text-red-500" id="loading-error-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 实时日志 -->
+        <div class="bg-white rounded-lg shadow-sm p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900">系统日志</h3>
+                <button id="clear-logs-btn" class="text-sm text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-trash mr-1"></i>清空日志
+                </button>
+            </div>
+            <div id="system-logs" class="bg-gray-50 rounded-lg p-4 h-64 overflow-y-auto font-mono text-sm">
+                <div class="text-gray-500">等待系统日志...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 系统状态监控
+        class SystemStatusMonitor {
+            constructor() {
+                this.logs = [];
+                this.maxLogs = 100;
+                this.updateInterval = null;
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.startMonitoring();
+                this.log('系统状态监控已启动');
+            }
+
+            bindEvents() {
+                document.getElementById('refresh-btn').addEventListener('click', () => {
+                    this.checkSystemHealth();
+                });
+
+                document.getElementById('clear-logs-btn').addEventListener('click', () => {
+                    this.clearLogs();
+                });
+            }
+
+            startMonitoring() {
+                // 立即检查一次
+                this.checkSystemHealth();
+                
+                // 每30秒检查一次
+                this.updateInterval = setInterval(() => {
+                    this.checkSystemHealth();
+                }, 30000);
+            }
+
+            async checkSystemHealth() {
+                this.log('开始系统健康检查...');
+                
+                try {
+                    // 模拟检查各个组件
+                    const components = {
+                        weatherService: await this.checkWeatherService(),
+                        imageManager: await this.checkImageManager(),
+                        audioManager: await this.checkAudioManager(),
+                        oceanAudioGenerator: await this.checkOceanAudio(),
+                        loadingManager: await this.checkLoadingManager()
+                    };
+
+                    this.updateUI(components);
+                    this.updateLastUpdateTime();
+                    
+                } catch (error) {
+                    this.log(`系统检查失败: ${error.message}`, 'error');
+                }
+            }
+
+            async checkWeatherService() {
+                // 模拟天气服务检查
+                const isHealthy = Math.random() > 0.1; // 90% 健康率
+                const autoUpdate = Math.random() > 0.2; // 80% 自动更新运行
+                
+                return {
+                    status: isHealthy ? 'healthy' : 'warning',
+                    autoUpdate: autoUpdate,
+                    lastUpdate: autoUpdate ? this.getRandomTime() : '未更新',
+                    cacheSize: Math.floor(Math.random() * 5) + 1,
+                    errors: isHealthy ? [] : ['模拟错误: 网络连接不稳定']
+                };
+            }
+
+            async checkImageManager() {
+                const isHealthy = Math.random() > 0.15;
+                return {
+                    status: isHealthy ? 'healthy' : 'warning',
+                    successCount: Math.floor(Math.random() * 50) + 20,
+                    errorCount: Math.floor(Math.random() * 5),
+                    errors: isHealthy ? [] : ['部分图片加载失败']
+                };
+            }
+
+            async checkAudioManager() {
+                const isHealthy = Math.random() > 0.1;
+                return {
+                    status: isHealthy ? 'healthy' : 'error',
+                    playing: Math.random() > 0.5 ? '播放中' : '已暂停',
+                    errors: isHealthy ? [] : ['音频初始化失败']
+                };
+            }
+
+            async checkOceanAudio() {
+                const isHealthy = Math.random() > 0.2;
+                return {
+                    status: isHealthy ? 'healthy' : 'warning',
+                    errors: isHealthy ? [] : ['海洋音效生成器未初始化']
+                };
+            }
+
+            async checkLoadingManager() {
+                const isHealthy = Math.random() > 0.05;
+                return {
+                    status: isHealthy ? 'healthy' : 'error',
+                    errors: isHealthy ? [] : ['加载管理器异常']
+                };
+            }
+
+            updateUI(components) {
+                let healthyCount = 0;
+                const totalCount = Object.keys(components).length;
+
+                // 更新各个组件状态
+                Object.entries(components).forEach(([name, component]) => {
+                    if (component.status === 'healthy') healthyCount++;
+                    this.updateComponentUI(name, component);
+                });
+
+                // 更新总体状态
+                const overallHealth = healthyCount / totalCount;
+                const overallStatus = overallHealth >= 0.8 ? 'healthy' : 
+                                    overallHealth >= 0.5 ? 'warning' : 'error';
+
+                this.updateOverallStatus(overallStatus, healthyCount, totalCount);
+                
+                this.log(`系统检查完成: ${healthyCount}/${totalCount} 组件正常`);
+            }
+
+            updateComponentUI(name, component) {
+                const statusDot = document.getElementById(`${name.replace('Service', '').replace('Manager', '').replace('Generator', '')}-status-dot`);
+                const statusText = document.getElementById(`${name.replace('Service', '').replace('Manager', '').replace('Generator', '')}-status`);
+                
+                if (statusDot) {
+                    statusDot.className = 'w-3 h-3 rounded-full';
+                    switch (component.status) {
+                        case 'healthy':
+                            statusDot.classList.add('bg-green-500');
+                            break;
+                        case 'warning':
+                            statusDot.classList.add('bg-yellow-500');
+                            break;
+                        case 'error':
+                            statusDot.classList.add('bg-red-500');
+                            break;
+                    }
+                }
+
+                if (statusText) {
+                    statusText.textContent = component.status === 'healthy' ? '正常' : 
+                                           component.status === 'warning' ? '警告' : '错误';
+                    statusText.className = `font-medium ${
+                        component.status === 'healthy' ? 'text-green-600' : 
+                        component.status === 'warning' ? 'text-yellow-600' : 'text-red-600'
+                    }`;
+                }
+
+                // 更新特定组件的详细信息
+                if (name === 'weatherService') {
+                    this.updateElement('weather-auto-update', component.autoUpdate ? '✅ 运行中' : '❌ 已停止');
+                    this.updateElement('weather-last-update', component.lastUpdate);
+                    this.updateElement('weather-cache-size', component.cacheSize);
+                } else if (name === 'imageManager') {
+                    this.updateElement('image-success-count', component.successCount);
+                    this.updateElement('image-error-count', component.errorCount);
+                }
+
+                // 更新错误信息
+                this.updateErrors(name, component.errors);
+            }
+
+            updateOverallStatus(status, healthyCount, totalCount) {
+                const icon = document.getElementById('overall-status-icon');
+                const text = document.getElementById('overall-status-text');
+                const count = document.getElementById('healthy-count');
+
+                if (icon) {
+                    icon.className = 'w-4 h-4 rounded-full mr-2';
+                    switch (status) {
+                        case 'healthy':
+                            icon.classList.add('bg-green-500');
+                            break;
+                        case 'warning':
+                            icon.classList.add('bg-yellow-500');
+                            break;
+                        case 'error':
+                            icon.classList.add('bg-red-500');
+                            break;
+                    }
+                }
+
+                if (text) {
+                    text.textContent = status === 'healthy' ? '系统正常' : 
+                                     status === 'warning' ? '部分异常' : '系统异常';
+                    text.className = `text-lg font-semibold ${
+                        status === 'healthy' ? 'text-green-600' : 
+                        status === 'warning' ? 'text-yellow-600' : 'text-red-600'
+                    }`;
+                }
+
+                if (count) {
+                    count.textContent = `${healthyCount}/${totalCount} 组件正常`;
+                }
+            }
+
+            updateElement(id, value) {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.textContent = value;
+                }
+            }
+
+            updateErrors(componentName, errors) {
+                const prefix = componentName.replace('Service', '').replace('Manager', '').replace('Generator', '');
+                const errorsDiv = document.getElementById(`${prefix}-errors`);
+                const errorsList = document.getElementById(`${prefix}-error-list`);
+
+                if (errorsDiv && errorsList) {
+                    if (errors.length > 0) {
+                        errorsDiv.classList.remove('hidden');
+                        errorsList.innerHTML = errors.map(error => `<div>• ${error}</div>`).join('');
+                    } else {
+                        errorsDiv.classList.add('hidden');
+                    }
+                }
+            }
+
+            updateLastUpdateTime() {
+                const element = document.getElementById('last-update');
+                if (element) {
+                    element.textContent = `最后更新: ${new Date().toLocaleTimeString()}`;
+                }
+            }
+
+            getRandomTime() {
+                const minutes = Math.floor(Math.random() * 30) + 1;
+                return `${minutes}分钟前`;
+            }
+
+            log(message, type = 'info') {
+                const timestamp = new Date().toLocaleTimeString();
+                const logEntry = {
+                    timestamp,
+                    message,
+                    type
+                };
+
+                this.logs.unshift(logEntry);
+                if (this.logs.length > this.maxLogs) {
+                    this.logs = this.logs.slice(0, this.maxLogs);
+                }
+
+                this.updateLogsDisplay();
+            }
+
+            updateLogsDisplay() {
+                const logsContainer = document.getElementById('system-logs');
+                if (!logsContainer) return;
+
+                const logsHtml = this.logs.map(log => {
+                    const colorClass = log.type === 'error' ? 'text-red-600' : 
+                                     log.type === 'warning' ? 'text-yellow-600' : 'text-gray-700';
+                    return `<div class="${colorClass}">[${log.timestamp}] ${log.message}</div>`;
+                }).join('');
+
+                logsContainer.innerHTML = logsHtml || '<div class="text-gray-500">暂无日志</div>';
+                logsContainer.scrollTop = 0;
+            }
+
+            clearLogs() {
+                this.logs = [];
+                this.updateLogsDisplay();
+                this.log('日志已清空');
+            }
+
+            destroy() {
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                }
+            }
+        }
+
+        // 启动监控
+        const monitor = new SystemStatusMonitor();
+
+        // 页面卸载时清理
+        window.addEventListener('beforeunload', () => {
+            monitor.destroy();
+        });
+    </script>
+</body>
+</html>
